@@ -20,12 +20,6 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
 
-/*
- * TODO:
- * - GPS-simulaattori (Ville).
- * - Funktion angularDistanceTo korjaus (Jami).
- * - Navigointifunktion kirjoittaminen (Juho).
- */
 
 #ifndef NAVIGATION_H_
 #define NAVIGATION_H_
