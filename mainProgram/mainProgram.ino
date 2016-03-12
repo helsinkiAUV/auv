@@ -8,15 +8,16 @@ void setup()
   Coord target(1, 25.0);
   Coord start(0, 25.0);
 
-  double nextHeading, cte, dist;
+  int nh;
+  double cte, dist;
   bool inForbZone;
 
   unsigned long t1, t2;
   t1 = micros();
-  newBearing(start, target, current, 1E4, 1E5, nextHeading, dist, cte, inForbZone);
+  newBearing(start, target, current, 1E4, 1E5, nh, dist, cte, inForbZone);
   t2 = micros();
   
-  Serial.println(nextHeading, 1);
+  Serial.println(nh);
   Serial.println(dist/1000, 1);
   //Serial.println(val, 10);
   Serial.println((t2-t1)/1000.0, 3);

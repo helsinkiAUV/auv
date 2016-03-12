@@ -7,12 +7,13 @@ int main ()
     Coord target(1, 25.0);
 	Coord start(0, 25.0);
 
-	double nextHeading, cte, dist;
+	int nh;
+	double cte, dist;
 	bool inForbZone;
 
-	newBearing(start, target, current, 1E4, 1E5, nextHeading, dist, cte, inForbZone);
+	newBearing(start, target, current, 1E4, 1E5, nh, dist, cte, inForbZone);
 
-	std::cout << nextHeading << std::endl;
+	std::cout << nh << std::endl;
 	std::cout << dist/1000 << std::endl;
 	std::cout << cte/1000 << std::endl;
 	std::cout << inForbZone << std::endl;

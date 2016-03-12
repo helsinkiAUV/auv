@@ -20,6 +20,12 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
 
+/*
+ * TODO:
+ * - GPS-simulaattori (Ville).
+ * - Funktion angularDistanceTo korjaus (Jami).
+ * - Navigointifunktion kirjoittaminen (Juho).
+ */
 
 #ifndef NAVIGATION_H_
 #define NAVIGATION_H_
@@ -268,13 +274,13 @@ Coord Coord::closestGreatCirclePoint (const Coord& start, const Coord& target) c
  *     double maxPassDist      : Maximum acceptable distance for passing the target point [meters].
  *     double maxCrossTrackErr : Maximum distance from the great circle [meters].
  *  OUTPUT:
- *     double nextBearing      : New optimal bearing for the boat [DEGREES].
+ *     int nextBearing      : New optimal bearing for the boat [DEGREES].
  *     double distToTarget     : Distance to target along a great circle (from current point to target) [meters].
  *     double crossTrackErr    : Current cross-track error [meters].
  *     bool inForbiddenZone    : Indicates, whether the boat is in a forbidden zone.
  */
 void newBearing (const Coord& start, const Coord& target, const Coord& current, const double maxPassDist,
-    const double maxCrossTrackErr, double& nextBearing, double& distToTarget, double& crossTrackErr, bool& inForbiddenZone)
+    const double maxCrossTrackErr, int& nextBearing, double& distToTarget, double& crossTrackErr, bool& inForbiddenZone)
 {
   double r = current.distanceTo(target); // Distance from current point to target.
   double L = start.distanceTo(target); // Distance between waypoints.
@@ -297,7 +303,7 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
 
   if (y >= L - maxPassDist) // If close to the target, approach target directly.
   {
-    nextBearing = current.bearingTo(target) * 180 / M_PI;
+    nextBearing = (int) (current.bearingTo(target) * 180 / M_PI);
     crossTrackErr = r;
     distToTarget = r;
     inForbiddenZone = true;
@@ -327,14 +333,12 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
     // The larger the cross-track error, the steeper we approach the great circle.
     if (leftOfGc)
     {
-      nextBearing = bearingToTarget + fmin((cte / s), 1.0) * angleBetweenBearings(bearingToProjection, bearingToTarget);
+      nextBearing = (int) ((bearingToTarget + fmin((cte / s), 1.0) * angleBetweenBearings(bearingToProjection, bearingToTarget)) * 180.0 / M_PI);
     }
     else
     {
-      nextBearing = bearingToTarget - fmin((cte / s), 1.0) * angleBetweenBearings(bearingToProjection, bearingToTarget);
+      nextBearing = (int) ((bearingToTarget - fmin((cte / s), 1.0) * angleBetweenBearings(bearingToProjection, bearingToTarget)) * 180.0 / M_PI);
     }
-    // Convert heading to degrees.
-    nextBearing *= 180.0 / M_PI;
     if (nextBearing >= 360) nextBearing -= 360;
     if (nextBearing < 0) nextBearing += 360;
 
@@ -347,4 +351,3 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
 }
 
 #endif // NAVIGATION_H_
-
