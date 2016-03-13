@@ -24,9 +24,10 @@
 #define GPSSIMULATOR_H_
 
 #include "Coord.h"
+#include "Gps.h"
 #include <math.h>
 
-class GpsSimulator
+class GpsSimulator : public Gps
 {
 public:
 	GpsSimulator (Coord current, double bs, double ds, int wd, double dt, int heading, double acc) :
@@ -116,7 +117,7 @@ private:
  */
 Coord GpsSimulator::read () const
 {   // Korjaa tama funktio.
-	return _current;
+	return Coord(1,1);
 }
 
 /* void GpsSimulator::moveToNextPoint()

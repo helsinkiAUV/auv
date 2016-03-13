@@ -1,28 +1,11 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+# This .gitignore will only track the files with extensions *.cpp, *.h, *.py and *.ino
 
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
+# Blacklist everything
+*
+# Whitelist all directories
+!*/
+# Whitelist the specific file extensions:
+!*.cpp
+!*.h
+!*.py
+!*.ino

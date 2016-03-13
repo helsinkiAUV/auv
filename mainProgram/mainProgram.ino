@@ -1,3 +1,8 @@
+#include "Arduino.h"
+#define FOR_ARDUINO
+#include "constants.h"
+#include "Coord.h"
+#include "Gps.h"
 #include "navigation.h"
 
 // Sets up the environment for the main loop.

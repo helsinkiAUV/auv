@@ -1,6 +1,6 @@
 /*
- * Constants for the AUV software.
- * Created by Juho Iipponen on March 12, 2016.
+ * GPS class.
+ * Created by Juho Iipponen on March 11, 2016.
  *
  * This file is part of the University of Helsinki AUV source code.
  *
@@ -20,15 +20,32 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
 
-#ifndef CONSTANTS_H_
-#define CONSTANTS_H_
+#ifndef GPS_H_
+#define GPS_H_
 
-#include <math.h>
+#include "Coord.h"
+#include "constants.h"
 
-const double RE = 6371E3; // Mean Earth radius.
-const double fullCirc = 2.0 * M_PI;
-const double halfCirc = M_PI;
+class Gps
+{
+  public:
+    explicit Gps ()
+    {
+    }
 
-const int gpsNumOfAveragingPoints = 10;
+    virtual ~Gps ()
+    {
+    }
 
-#endif /* CONSTANTS_H_ */
+   /* Coord Gps::averageCoordinate () const
+    * PURPOSE: Return weigted average coordinate, which represents the best guess of the current position.
+    */
+    Coord averageCoordinate (int numPoints) const;
+
+    /* Coord Gps::read() const
+     * PURPOSE: Reads in the current GPS coordinate.
+     */
+    virtual Coord read () const;
+};
+
+#endif /* GPS_H_ */
