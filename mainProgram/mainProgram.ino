@@ -1,4 +1,4 @@
-#include "Arduino.h"
+#include "Arduino.h" // Include this to every header file, where you want to use the Arduino functions.
 #define FOR_ARDUINO
 #include "constants.h"
 #include "Coord.h"
@@ -9,7 +9,7 @@
 void setup() 
 {
   Serial.begin(19200);
-  Coord current(0.9, 24.9);
+  Coord current(0.5, 25.1);
   Coord target(1, 25.0);
   Coord start(0, 25.0);
 

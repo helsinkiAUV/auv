@@ -24,7 +24,8 @@
 
 double angleBetweenBearings (const double b1, const double b2)
 {
-  return fabs(fmod((fmod(b1-b2, fullCirc) + fullCirc + halfCirc), fullCirc) - halfCirc);
+  //return fabs(fmod((fmod(b1-b2, fullCirc) + fullCirc + halfCirc), fullCirc) - halfCirc);
+  return (fmod((fmod(b1-b2, fullCirc) + fullCirc + halfCirc), fullCirc) - halfCirc);
 }
 
 Coord convertToCoord (double xyz[3])

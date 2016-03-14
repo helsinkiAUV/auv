@@ -69,19 +69,13 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
     }
 
     double cte = current.distanceTo(projectionToGc); // Cross-track error.
-    bool leftOfGc = current.leftOfTheGreatCircle(start, target);
     double bearingToTarget = current.bearingTo(target);
     double bearingToProjection = current.bearingTo(projectionToGc);
 
     // The larger the cross-track error, the steeper we approach the great circle.
-    if (leftOfGc)
-    {
-      nextBearing = (int) ((bearingToTarget + fmin((cte / s), 1.0) * angleBetweenBearings(bearingToProjection, bearingToTarget)) * 180.0 / M_PI);
-    }
-    else
-    {
-      nextBearing = (int) ((bearingToTarget - fmin((cte / s), 1.0) * angleBetweenBearings(bearingToProjection, bearingToTarget)) * 180.0 / M_PI);
-    }
+    // Correction is negative if on the right side of the great circle.
+    double correctionAngle = fmin((cte / s), 1.0) * angleBetweenBearings(bearingToProjection, bearingToTarget);
+    nextBearing = (int) ((bearingToTarget + correctionAngle) * 180.0 / M_PI);
     if (nextBearing >= 360) nextBearing -= 360;
     if (nextBearing < 0) nextBearing += 360;
 

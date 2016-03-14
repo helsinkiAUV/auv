@@ -30,6 +30,7 @@
 #ifndef NAVIGATION_H_
 #define NAVIGATION_H_
 
+#include "Arduino.h"
 #include "constants.h"
 #include "Coord.h"
 #include "Gps.h"

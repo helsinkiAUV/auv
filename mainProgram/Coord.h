@@ -54,7 +54,7 @@ struct Coord
   {
   }
 
-  Coord (const Coord& ) = default;
+  //Coord (const Coord& ) = default;
   //Coord (Coord&& ) = default;
 
   // Member functions.
