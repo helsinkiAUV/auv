@@ -54,7 +54,7 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
   {
     // Distance away from which the auv will begin approaching closer to the target.
     float approachRange = fmax(distStartToTarget - 5 * maxPassDist, 0.0);
-    float distToForbidZoneFromGc; // Distance from the great circle to the boundary of the forbidden zone.
+    float distToForbidZoneFromGc; // Distance from the great circle (between start and target) to the boundary of the forbidden zone.
     if (distStartToProj < approachRange)
     {
       distToForbidZoneFromGc = maxCrossTrackErr;

@@ -45,13 +45,15 @@
  *     Coord start             : Coordinates of the initial point (usually the previous waypoint).
  *     Coord target            : Coordinates of the target point.
  *     Coord current           : Present GPS coordinate.
- *     float maxPassDist      : Maximum acceptable distance for passing the target point [meters].
- *     float maxCrossTrackErr : Maximum distance from the great circle [meters].
+ *     float maxPassDist       : Maximum acceptable distance for passing the target point [meters].
+ *     float maxCrossTrackErr  : Maximum distance from the great circle [meters].
  *  OUTPUT:
- *     int nextBearing      : New optimal bearing for the boat [DEGREES].
+ *     int nextBearing        : New optimal bearing for the boat [DEGREES].
  *     float distToTarget     : Distance to target along a great circle (from current point to target) [meters].
  *     float crossTrackErr    : Current cross-track error [meters].
- *     bool inForbiddenZone    : Indicates, whether the boat is in a forbidden zone.
+ *     bool inForbiddenZone   : Indicates, whether the boat is in a forbidden zone. Forbidden zone is the region in which
+ *                              the AUV is out of its navigational path (i.e. further away from the great circle than the
+ *                              maxCrossTrackErr or, if accidentally passed the end point, maxPassDist).
  */
 void newBearing (const Coord& start, const Coord& target, const Coord& current, const float maxPassDist,
                  const float maxCrossTrackErr, int& nextBearing, float& distToTarget, float& crossTrackErr, bool& inForbiddenZone);

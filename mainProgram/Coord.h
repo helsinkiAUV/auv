@@ -58,42 +58,42 @@ struct Coord
   //Coord (Coord&& ) = default;
 
   // Member functions.
- /* float Coord::bearingTo (const Coord& p)
-  * PURPOSE: Computes initial bearing to point p.
-  * INPUT:
-  *     Coord p : Coordinate of another point.
-  * OUTPUT:
-  *     (float) initial bearing in RADIANS [0,2*pi[.
-  */
+  /* float Coord::bearingTo (const Coord& p)
+   * PURPOSE: Computes initial bearing to point p.
+   * INPUT:
+   *     Coord p : Coordinate of another point.
+   * OUTPUT:
+   *     (float) initial bearing in RADIANS [0,2*pi[.
+   */
   float bearingTo (const Coord& p) const;
 
- /* float Coord::distanceTo (const Coord& p)
-  * PURPOSE: Computes great circle distance to point p.
-  * INPUT:
-  *     Coord p : Coordinate of another point.
-  * OUTPUT:
-  *     (float) great circle distance to point p [meters].
-  */
+  /* float Coord::distanceTo (const Coord& p)
+   * PURPOSE: Computes great circle distance to point p.
+   * INPUT:
+   *     Coord p : Coordinate of another point.
+   * OUTPUT:
+   *     (float) great circle distance to point p [meters].
+   */
   float distanceTo (const Coord& p) const;
 
- /* float Coord::angularDistanceTo (const Coord& p)
-  * PURPOSE: Computes great circle angular distance to point p.
-  * INPUT:
-  *     Coord p : Coordinate of another point.
-  * OUTPUT:
-  *     (float) great circle angular distance to point p [RADIANS].
-  */
+  /* float Coord::angularDistanceTo (const Coord& p)
+   * PURPOSE: Computes great circle angular distance to point p.
+   * INPUT:
+   *     Coord p : Coordinate of another point.
+   * OUTPUT:
+   *     (float) great circle angular distance to point p [RADIANS].
+   */
   float angularDistanceTo (const Coord& p) const;
 
- /* Coord::leftOfTheGreatCircle (const Coord& start, const Coord& target) const
-  * PURPOSE: Compute, wheter point is on the left or right side of the great circle
-  *          as viewed from the start point to the target.
-  * INPUT:
-  *     Coord start   : Coordinates of the initial point (usually the previous waypoint).
-  *     Coord target  : Coordinates of the target point.
-  * OUTPUT:
-  *     bool : true, if current point is on the left side; false if on the right.
-  */
+  /* Coord::leftOfTheGreatCircle (const Coord& start, const Coord& target) const
+   * PURPOSE: Compute, wheter point is on the left or right side of the great circle
+   *          as viewed from the start point to the target.
+   * INPUT:
+   *     Coord start   : Coordinates of the initial point (usually the previous waypoint).
+   *     Coord target  : Coordinates of the target point.
+   * OUTPUT:
+   *     bool : true, if current point is on the left side; false if on the right.
+   */
   bool leftOfTheGreatCircle (const Coord& start, const Coord& target) const;
 
   /* Coord Coord::closestGreatCirclePoint (const Coord& start, const Coord& target) const
@@ -107,14 +107,16 @@ struct Coord
    *     NOTE: Can be outside the line segment from start to target.
    */
   Coord closestGreatCirclePoint (const Coord& start, const Coord& target) const;
- /* Coord Coord::destination (float heading, float distance)
-  * PURPOSE: Compute destination point given heading and distance from this.
-  * INPUT:
-  *     float heading  : heading in RADIANS [0,2*pi[
-  *     float distance : distance traveled in meters.
-  * OUTPUT:
-  *     (Coord) destination point.
-  */
+
+  /* Coord Coord::destination (float heading, float distance)
+   * PURPOSE: Compute the destination point given heading and distance from this. 
+   *          COMPUTATION PERFORMED ALONG THE GREAT CIRCLE.
+   * INPUT:
+   *     float heading  : heading in RADIANS [0,2*pi[ from this.
+   *     float distance : distance traveled in meters from this.
+   * OUTPUT:
+   *     (Coord) destination point.
+   */
   Coord destination (float heading, float distance) const;
 
   /* void Coord::convertToXYZ(float xyz[3])

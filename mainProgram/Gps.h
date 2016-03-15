@@ -42,8 +42,9 @@ class Gps
     */
     Coord averageCoordinate (int numPoints) const;
 
-    /* Coord Gps::read() const
+    /* virtual Coord Gps::read() const
      * PURPOSE: Reads in the current GPS coordinate.
+     * NOTE: Overloaded in ../testSuite/GpsSimulator.h -> GpsSimulator
      */
     virtual Coord read () const;
 };
