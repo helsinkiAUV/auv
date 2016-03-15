@@ -72,9 +72,10 @@ double Coord::angularDistanceTo (const Coord& p) const
 { // TODO: Vaihda karteesisesta isoympyramitaksi.
 // HUOMIOI, että Arduinossa double == float, joten
 // numeeriseen epätarkkuuteen kannattaa kiinnittää huomiota!
-  double dx = cos((lat + p.lat) * 0.5) * (p.lon - lon);
-  double dy = (p.lat - lat);
-  return sqrt(dy * dy + dx * dx);
+  
+    double a = sin((p.lat - lat)/2) * sin((p.lat - lat)/2) + cos(lon) * cos(p.lon) * sin((p.lon - lon)/2) * sin((p.lon - lon)/2);
+    double greatCircleDistance = 2 * RE * atan2(sqrt(a), sqrt(1 - a));
+    return greatCircleDistance;
 }
 
 bool Coord::leftOfTheGreatCircle (const Coord& start, const Coord& target) const
@@ -120,5 +121,4 @@ Coord Coord::closestGreatCirclePoint (const Coord& start, const Coord& target) c
   double projectedPoint[3] = { thisCoord[0] - d * n[0], thisCoord[1] - d * n[1], thisCoord[2] - d * n[2] };
   return convertToCoord(projectedPoint);
 }
-
 
