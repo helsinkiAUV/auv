@@ -25,10 +25,10 @@
 
 #include <math.h>
 
-/* void crossProduct (double v0[3], double v1[3], double n[3])
+/* void crossProduct (float v0[3], float v1[3], float n[3])
  * PURPOSE: Computes cross product of v0 x v1 and stores the result into n.
  */
-void crossProduct (double v0[3], double v1[3], double n[3]);
+void crossProduct (float v0[3], float v1[3], float n[3]);
 
 
 #endif /* UTILITY_H_ */

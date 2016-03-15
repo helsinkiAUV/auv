@@ -22,66 +22,62 @@
 
 #include "navigation.h"
 
-void newBearing (const Coord& start, const Coord& target, const Coord& current, const double maxPassDist,
-                 const double maxCrossTrackErr, int& nextBearing, double& distToTarget, double& crossTrackErr, bool& inForbiddenZone)
+void newBearing (const Coord& start, const Coord& target, const Coord& current, const float maxPassDist,
+                 const float maxCrossTrackErr, int& nextBearing, float& distToTarget, float& crossTrackErr, bool& inForbiddenZone)
 {
-  double r = current.distanceTo(target); // Distance from current point to target.
-  double L = start.distanceTo(target); // Distance between waypoints.
+  distToTarget = current.distanceTo(target); // Distance from current point to target.
+  float distStartToTarget = start.distanceTo(target); // Distance between waypoints.
 
   // Compute projection of the current point to the great circle.
   Coord projectionToGc = current.closestGreatCirclePoint(start, target);
 
-  // Compute the y-coordinate.
-  double pToTar = projectionToGc.distanceTo(target);
-  double y = 0.0;
+  float distProjToTarget = projectionToGc.distanceTo(target);
+  float distStartToProj = 0.0;
   // Check if we have accidentally gone past the target point, but are not within the maxPassDist.
-  if (projectionToGc.distanceTo(start) >= L)
+  if (projectionToGc.distanceTo(start) >= distStartToTarget)
   {
-    y = L + pToTar;
+    distStartToProj = distStartToTarget + distProjToTarget;
   }
   else
   {
-    y = L - pToTar;
+    distStartToProj = distStartToTarget - distProjToTarget;
   }
 
-  if (y >= L - maxPassDist) // If close to the target, approach target directly.
+  if (distStartToProj >= distStartToTarget - maxPassDist) // If close to the target, approach target directly.
   {
     nextBearing = (int) (current.bearingTo(target) * 180 / M_PI);
-    crossTrackErr = r;
-    distToTarget = r;
+    crossTrackErr = distToTarget;
     inForbiddenZone = true;
     return;
   }
   else
   {
     // Distance away from which the auv will begin approaching closer to the target.
-    double appRange = fmax(L - 5 * maxPassDist, 0.0);
-    double s; // Distance from the great circle to the boundary of the forbidden zone.
-    if (y < appRange)
+    float approachRange = fmax(distStartToTarget - 5 * maxPassDist, 0.0);
+    float distToForbidZoneFromGc; // Distance from the great circle to the boundary of the forbidden zone.
+    if (distStartToProj < approachRange)
     {
-      s = maxCrossTrackErr;
+      distToForbidZoneFromGc = maxCrossTrackErr;
     }
     else // On approach to target.
     {
       // Slope of approach.
-      double appSlope = (maxCrossTrackErr - maxPassDist) / (maxPassDist - appRange);
-      s = maxPassDist + appSlope * (y - (L - maxPassDist));
+      float appSlope = (maxCrossTrackErr - maxPassDist) / (maxPassDist - approachRange);
+      distToForbidZoneFromGc = maxPassDist + appSlope * (distStartToProj - (distStartToTarget - maxPassDist));
     }
 
-    double cte = current.distanceTo(projectionToGc); // Cross-track error.
-    double bearingToTarget = current.bearingTo(target);
-    double bearingToProjection = current.bearingTo(projectionToGc);
+    crossTrackErr = current.distanceTo(projectionToGc); // Cross-track error.
+    float bearingToTarget = current.bearingTo(target);
+    float bearingToProjection = current.bearingTo(projectionToGc);
 
     // The larger the cross-track error, the steeper we approach the great circle.
     // Correction is negative if on the right side of the great circle.
-    double correctionAngle = fmin((cte / s), 1.0) * angleBetweenBearings(bearingToProjection, bearingToTarget);
+    float correctionAngle = fmin((crossTrackErr / distToForbidZoneFromGc), 1.0) * angleBetweenBearings(bearingToProjection, bearingToTarget);
     nextBearing = (int) ((bearingToTarget + correctionAngle) * 180.0 / M_PI);
     if (nextBearing >= 360) nextBearing -= 360;
     if (nextBearing < 0) nextBearing += 360;
 
-    distToTarget = r;
-    crossTrackErr = cte;
-    inForbiddenZone = cte > s;
+    inForbiddenZone = crossTrackErr > distToForbidZoneFromGc;
     return;
   }
 }

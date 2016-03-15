@@ -35,20 +35,20 @@
  */
 struct Coord
 {
-  double latd; // Latitude in decimal DEGREES.
-  double lond; // Longitude in decimal DEGREES.
+  float latd; // Latitude in decimal DEGREES.
+  float lond; // Longitude in decimal DEGREES.
 
-  double lat;  // Latitude in RADIANS.
-  double lon;  // Longitude in RADIANS.
+  float lat;  // Latitude in RADIANS.
+  float lon;  // Longitude in RADIANS.
 
-  double cosLat; // Cosine of latitude.
-  double sinLat; // Sine of latitude.
+  float cosLat; // Cosine of latitude.
+  float sinLat; // Sine of latitude.
 
-  double cosLon; // Cosine of longitude.
-  double sinLon; // Sine of longitude;
+  float cosLon; // Cosine of longitude.
+  float sinLon; // Sine of longitude;
 
   // Constructor (input in degrees).
-  Coord (double latIn, double lonIn) :
+  Coord (float latIn, float lonIn) :
     latd(latIn), lond(lonIn), lat(latIn * M_PI / 180.0), lon(lonIn * M_PI / 180.0), cosLat(cos(lat)), sinLat(sin(lat)),
     cosLon(cos(lon)), sinLon(sin(lon))
   {
@@ -58,32 +58,32 @@ struct Coord
   //Coord (Coord&& ) = default;
 
   // Member functions.
- /* double Coord::bearingTo (const Coord& p)
+ /* float Coord::bearingTo (const Coord& p)
   * PURPOSE: Computes initial bearing to point p.
   * INPUT:
   *     Coord p : Coordinate of another point.
   * OUTPUT:
-  *     (double) initial bearing in RADIANS [0,2*pi[.
+  *     (float) initial bearing in RADIANS [0,2*pi[.
   */
-  double bearingTo (const Coord& p) const;
+  float bearingTo (const Coord& p) const;
 
- /* double Coord::distanceTo (const Coord& p)
+ /* float Coord::distanceTo (const Coord& p)
   * PURPOSE: Computes great circle distance to point p.
   * INPUT:
   *     Coord p : Coordinate of another point.
   * OUTPUT:
-  *     (double) great circle distance to point p [meters].
+  *     (float) great circle distance to point p [meters].
   */
-  double distanceTo (const Coord& p) const;
+  float distanceTo (const Coord& p) const;
 
- /* double Coord::angularDistanceTo (const Coord& p)
+ /* float Coord::angularDistanceTo (const Coord& p)
   * PURPOSE: Computes great circle angular distance to point p.
   * INPUT:
   *     Coord p : Coordinate of another point.
   * OUTPUT:
-  *     (double) great circle angular distance to point p [RADIANS].
+  *     (float) great circle angular distance to point p [RADIANS].
   */
-  double angularDistanceTo (const Coord& p) const;
+  float angularDistanceTo (const Coord& p) const;
 
  /* Coord::leftOfTheGreatCircle (const Coord& start, const Coord& target) const
   * PURPOSE: Compute, wheter point is on the left or right side of the great circle
@@ -107,46 +107,46 @@ struct Coord
    *     NOTE: Can be outside the line segment from start to target.
    */
   Coord closestGreatCirclePoint (const Coord& start, const Coord& target) const;
- /* Coord Coord::destination (double heading, double distance)
+ /* Coord Coord::destination (float heading, float distance)
   * PURPOSE: Compute destination point given heading and distance from this.
   * INPUT:
-  *     double heading  : heading in RADIANS [0,2*pi[
-  *     double distance : distance traveled in meters.
+  *     float heading  : heading in RADIANS [0,2*pi[
+  *     float distance : distance traveled in meters.
   * OUTPUT:
   *     (Coord) destination point.
   */
-  Coord destination (double heading, double distance) const;
+  Coord destination (float heading, float distance) const;
 
-  /* void Coord::convertToXYZ(double xyz[3])
+  /* void Coord::convertToXYZ(float xyz[3])
    * PURPOSE: Converts the coordinate to a cartesian system.
    * INPUT:
-   *     double xyz[3] : Storage for output.
+   *     float xyz[3] : Storage for output.
    * OUTPUT:
-   *     double xyz[3] : Coordinate output.
+   *     float xyz[3] : Coordinate output.
    *
    */
-  void convertToXYZ (double xyz[3]) const;
+  void convertToXYZ (float xyz[3]) const;
 };
 
-/* double angleBetweenBearings(const double b1, const double b2)
+/* float angleBetweenBearings(const float b1, const float b2)
  * PURPOSE: Computes angle [0, pi] between two compass bearings.
  * INPUT:
- *     double b1 : bearing 1 (RADIANS)
- *     double b2 : bearing 2 (RADIANS)
+ *     float b1 : bearing 1 (RADIANS)
+ *     float b2 : bearing 2 (RADIANS)
  * OUTPUT:
- *     (double) angle between two bearings [0, pi]
+ *     (float) angle between two bearings [0, pi]
  */
-double angleBetweenBearings (const double b1, const double b2);
+float angleBetweenBearings (const float b1, const float b2);
 
-/* Coord convertToCoord (double xyz[3])
+/* Coord convertToCoord (float xyz[3])
  * PURPOSE: Convert from cartesian to geodetic coordinates.
  * INPUT:
- *     double xyz[3] : cartesian coordinates
+ *     float xyz[3] : cartesian coordinates
  * OUTPUT:
  *     (Coord) geodetic coordinates corresponding to xyz.
  *
  */
-Coord convertToCoord (double xyz[3]);
+Coord convertToCoord (float xyz[3]);
 
 
 #endif /* COORD_H_ */

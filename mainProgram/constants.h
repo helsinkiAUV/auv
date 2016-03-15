@@ -25,9 +25,9 @@
 
 #include <math.h>
 
-const double RE = 6371E3; // Mean Earth radius.
-const double fullCirc = 2.0 * M_PI;
-const double halfCirc = M_PI;
+const float RE = 6371E3; // Mean Earth radius.
+const float fullCirc = 2.0 * M_PI;
+const float halfCirc = M_PI;
 
 const int gpsNumOfAveragingPoints = 10;
 

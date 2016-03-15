@@ -22,10 +22,10 @@
 
  #include "utility.h"
 
-void crossProduct (double v0[3], double v1[3], double n[3])
+void crossProduct (float v0[3], float v1[3], float n[3])
 {
-  double x0 = v0[0], y0 = v0[1], z0 = v0[2];
-  double x1 = v1[0], y1 = v1[1], z1 = v1[2];
+  float x0 = v0[0], y0 = v0[1], z0 = v0[2];
+  float x1 = v1[0], y1 = v1[1], z1 = v1[2];
   n[0] = y0 * z1 - z0 * y1;
   n[1] = z0 * x1 - x0 * z1;
   n[2] = x0 * y1 - y0 * x1;
