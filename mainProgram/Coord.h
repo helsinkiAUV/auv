@@ -128,6 +128,19 @@ struct Coord
    *
    */
   void convertToXYZ (float xyz[3]) const;
+
+  /* Coord crossingPoint (float heading, Coord other, float otherHeading)
+   * PURPOSE: To compute the crossing point between the current and some other
+   *          great circle.
+   * INPUT:
+   *     float heading : current boat heading in RADIANS [0,2*pi[
+   *     Coord other   : location of another body (e.g. another ship).
+   *     float otherHeading : heading of the other body in RADIANS [0,2*pi[
+   * OUTPUT:
+   *     (Coord) The crossing point between the two great circles, which is 
+   *             nearest to the current point.
+   */
+  Coord crossingPoint (float heading, Coord other, float otherHeading) const;
 };
 
 /* float angleBetweenBearings(const float b1, const float b2)
