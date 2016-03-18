@@ -76,7 +76,7 @@ struct Coord
    */
   float distanceTo (const Coord& p) const;
 
-  /* float Coord::angularDistanceTo (const Coord& p)
+  /* float Coord::angularDistanceTo (const Coord& p) const
    * PURPOSE: Computes great circle angular distance to point p.
    * INPUT:
    *     Coord p : Coordinate of another point.
