@@ -1,5 +1,5 @@
 BEFORE YOU BEGIN:
-Please make sure you are familiar with basic git usage, the workflow and the style guide presented below.
+Please make sure you are familiar with basic git usage (see below) and the programming style notes.
 
 
 BRIEF WORKFLOW SYNOPSIS:
@@ -11,6 +11,8 @@ BRIEF WORKFLOW SYNOPSIS:
 2.0. Edit the files. 
    Make local commits:
    2.1. $ git status # Check the status of the files.
+       * Additionally, you can see the differences you've made by
+         $ git diff
    2.2. $ git add <file1> [<file2> ...] # Add files to be commited.
        * Use $ git reset <file> to undo.
    2.3. $ git commit # Commit changes to the files. 
