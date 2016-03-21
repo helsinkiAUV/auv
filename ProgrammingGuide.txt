@@ -1,0 +1,53 @@
+BEFORE YOU BEGIN:
+Please make sure you are familiar with basic git usage, the workflow and the style guide presented below.
+
+
+BRIEF WORKFLOW SYNOPSIS:
+
+1. Clone the "auv" repository to the current directory 
+   (this only has to be done once on a given computer!):
+   $ git clone https://github.com/helsinkiAUV/auv.git
+
+2.0. Edit the files. 
+   Make local commits:
+   2.1. $ git status # Check the status of the files.
+   2.2. $ git add <file1> [<file2> ...] # Add files to be commited.
+       * Use $ git reset <file> to undo.
+   2.3. $ git commit # Commit changes to the files. 
+       * Write a brief one-liner using your favorite editor of couple of words
+         (e.g. "Add minor documentation") and save the file. The files have
+         now been committed LOCALLY.
+       * To undo: 
+         $ git log --stat --summary # View project history.
+         $ git reset HEAD~1 # HEAD~N goes back N commits
+         -> goto 2.1. and make a better commit.
+   2.4. goto 2.0. until the feature has been compeleted. If ready to publish, goto 2.5.
+   2.5. $ git pull --rebase origin master # Synchronize with the GitHub repo. DO THIS BEFORE YOU PUSH!
+       * In case of merge conflicts, go talk to the author of the specific file.
+   2.6. $ git push origin master # Push changes to GitHub.
+       * If the feature doesn't work, keep developing it locally.
+
+
+NOTES ON PROGRAMMING STYLE:
+- Every file must begin with the copyright notice, contain a short description 
+  of the file, its author and date of creation.
+- Separate class declaration from the definition. Use headers for documentation
+  and .cpp files for the implementation (e.g. Coord.h and Coord.cpp).
+- Write all headers within header guards.
+- Employ the "const" keyword wherever you can.
+- Use (const) references "&" if passing objects; pass primitive types by value.
+- Prefer stack allocation. NEVER use the "new" keyword in object construction, 
+  only together with dynamic arrays (always new/delete, never malloc/realloc/free).
+- Use floats instead of doubles on Arduino (doubles may be used on Raspberry pi).
+- Use long and descriptive function and variable names:
+ * e.g. "distanceToTarget" instead of "rTar" or something else non-descriptive.
+ * No one-character variable names outside of loop iterators!
+- Write good function documentation to the header files (see code for examples):
+  <function prototype (argument specification may be shortened by "..." if very long>
+  PURPOSE: <What does the function do?>
+  INPUT:
+      <typeIn1> <arg1> : <description of the input (units, range etc.)>
+      ...
+  OUTPUT:
+      (<typeOut1>) <description of the output>
+      ...
