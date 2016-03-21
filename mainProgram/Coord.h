@@ -67,7 +67,7 @@ struct Coord
    */
   float bearingTo (const Coord& p) const;
 
-  /* float Coord::distanceTo (const Coord& p)
+  /* float Coord::distanceTo (const Coord& p) const
    * PURPOSE: Computes great circle distance to point p.
    * INPUT:
    *     Coord p : Coordinate of another point.
