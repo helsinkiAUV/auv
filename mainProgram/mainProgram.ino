@@ -1,5 +1,4 @@
 #include "Arduino.h" // Include this to every header file, where you want to use the Arduino functions.
-#define FOR_ARDUINO
 #include "constants.h"
 #include "Coord.h"
 #include "Gps.h"
