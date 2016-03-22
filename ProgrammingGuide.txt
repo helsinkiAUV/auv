@@ -34,6 +34,7 @@ WORKFLOW SYNOPSIS:
 NOTES ON PROGRAMMING STYLE:
 - Every file must begin with the copyright notice, contain a short description 
   of the file, its author and date of creation.
+- Always #include "auv.h" into every file (at least in the body).
 - Separate class declaration from the definition. Use headers for documentation
   and .cpp files for the implementation (e.g. Coord.h and Coord.cpp).
 - Write all headers within header guards.
@@ -61,7 +62,7 @@ NOTES ON PROGRAMMING STYLE:
   <code for raspi>
   #elif defined(SIMULATOR) // Compile the simulator code
   <simulator code>
-  #else // Arduino
+  #elif defined(ARDUINO) // Compile for Arduino. Remember to #include "auv.h"
   <Arduino code>
   #endif
   
