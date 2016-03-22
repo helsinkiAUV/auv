@@ -1,6 +1,6 @@
 /*
- * GPS class.
- * Created by Juho Iipponen on March 11, 2016.
+ * Main AUV header
+ * Created by Juho Iipponen on March 22, 2016.
  *
  * This file is part of the University of Helsinki AUV source code.
  *
@@ -20,34 +20,11 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
 
-#ifndef GPS_H_
-#define GPS_H_
+#ifndef AUV_H_
+#define AUV_H_
 
-#include "auv.h"
-#include "Coord.h"
-#include "constants.h"
+#if !defined(RASPBERRY_PI) && !defined(SIMULATOR) && !defined(ARDUINO)
+  #define ARDUINO
+#endif
 
-class Gps
-{
-  public:
-    explicit Gps ()
-    {
-    }
-
-    virtual ~Gps ()
-    {
-    }
-
-   /* Coord Gps::averageCoordinate () const
-    * PURPOSE: Return weigted average coordinate, which represents the best guess of the current position.
-    */
-    Coord averageCoordinate (int numPoints) const;
-
-    /* virtual Coord Gps::read() const
-     * PURPOSE: Reads in the current GPS coordinate.
-     * NOTE: Overloaded in ../testSuite/GpsSimulator.h -> GpsSimulator
-     */
-    virtual Coord read () const;
-};
-
-#endif /* GPS_H_ */
+#endif

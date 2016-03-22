@@ -20,6 +20,7 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+> 
  */
 
+#include "auv.h"
 #include "Coord.h"
 
 float angleBetweenBearings (const float b1, const float b2)

@@ -23,6 +23,7 @@
 #ifndef COORD_H_
 #define COORD_H_
 
+#include "auv.h"
 #include "constants.h"
 #include "utility.h"
 #include <math.h> // fmod, M_PI

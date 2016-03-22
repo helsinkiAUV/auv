@@ -20,7 +20,8 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
 
- #include "utility.h"
+#include "auv.h"
+#include "utility.h"
 
 void crossProduct (float v0[3], float v1[3], float n[3])
 {

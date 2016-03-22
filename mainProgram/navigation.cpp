@@ -20,6 +20,7 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
 
+#include "auv.h"
 #include "navigation.h"
 
 void newBearing (const Coord& start, const Coord& target, const Coord& current, const float maxPassDist,
