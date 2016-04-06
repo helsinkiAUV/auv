@@ -33,7 +33,7 @@ int main (int argc, char **argv)
 
 	Coord next = gpsMock.read();
 
-	std::cout << next << std::endl;
+	std::cout << next << std::endl; 
 
 	return 0;
 }
