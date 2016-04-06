@@ -36,8 +36,20 @@ public:
 	{
 	}
 
+	/* Coord GpsSimulator::read() const
+	 * PURPOSE: To give gps coordinates randomized in the vicinity of the current point.
+	 *          Random distribution only affected by _accuracy.
+	 * OUTPUT:
+	 *     (Coord) random reading.
+	 */
 	Coord read () const;
+
+	/* void GpsSimulator::moveToNextPoint()
+	 * PURPOSE: Move to a next point along the constant heading, taking account the drift.
+	 */
 	void moveToNextPoint ();
+
+	// Getters and setters:
 
 	double getAccuracy () const
 	{
@@ -108,24 +120,5 @@ private:
 	double _heading; // [0,2*pi[;
 	double _accuracy; // Meters
 };
-
-/* Coord GpsSimulator::read() const
- * PURPOSE: To give gps coordinates randomized in the vicinity of the current point.
- *          Random distribution only affected by _accuracy.
- * OUTPUT:
- *     (Coord) random reading.
- */
-Coord GpsSimulator::read () const
-{   // Korjaa tama funktio.
-	return Coord(1,1);
-}
-
-/* void GpsSimulator::moveToNextPoint()
- * PURPOSE: Move to a next point along the constant heading, taking account the drift.
- */
-void GpsSimulator::moveToNextPoint ()
-{   // Korjaa tamakin funktio. VINKKI: Coord::destination(heading, distance).
-	return;
-}
 
 #endif /* GPSSIMULATOR_H_ */

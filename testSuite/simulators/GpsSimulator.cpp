@@ -1,6 +1,6 @@
 /*
- * GPS class.
- * Created by Juho Iipponen on March 11, 2016.
+ * GPS simulator used in the testing.
+ * Created by Juho Iipponen on April 6, 2016.
  *
  * This file is part of the University of Helsinki AUV source code.
  *
@@ -20,19 +20,20 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
 
-#include "auv.h"
-#include "Gps.h"
+#include <math.h>
+#include "GpsSimulator.h"
 
-Coord Gps::read() const
-{
-  // KORJAA!
-  return Coord(0, 0);
+Coord GpsSimulator::read () const
+{   // Korjaa tama funktio.
+	return Coord(1,1);
 }
 
-Coord Gps::averageCoordinate (int numPoints = gpsNumOfAveragingPoints) const
-{
-  // KORJAA!
-  return read();
+void GpsSimulator::moveToNextPoint ()
+{   // Korjaa tamakin funktio. VINKKI: Coord::destination(heading, distance).
+	return;
 }
+
+
+
 
 

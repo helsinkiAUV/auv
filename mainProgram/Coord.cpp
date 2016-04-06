@@ -121,4 +121,3 @@ Coord Coord::closestGreatCirclePoint (const Coord& start, const Coord& target) c
   float projectedPoint[3] = { thisCoord[0] - d * n[0], thisCoord[1] - d * n[1], thisCoord[2] - d * n[2] };
   return convertToCoord(projectedPoint);
 }
-

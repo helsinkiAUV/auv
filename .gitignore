@@ -1,10 +1,15 @@
-# This .gitignore will only track the files with extensions *.cpp, *.h, *.py and *.ino
+# This .gitignore will only track makefiles and files with extensions *.cpp, *.h, *.py and *.ino
 
 # Blacklist everything
 *
 # Whitelist all directories
 !*/
-# Whitelist the specific file extensions:
+
+# Whitelist makefiles
+!makefile
+!Makefile
+
+# Whitelist the specific file extensions
 !*.cpp
 !*.h
 !*.py

@@ -34,10 +34,6 @@ class Gps
     {
     }
 
-    virtual ~Gps ()
-    {
-    }
-
    /* Coord Gps::averageCoordinate () const
     * PURPOSE: Return weigted average coordinate, which represents the best guess of the current position.
     */

@@ -24,6 +24,13 @@
 #define COORD_H_
 
 #include "auv.h"
+
+#ifndef ARDUINO
+#include <iostream>
+#include <string>
+#include <iomanip>
+#endif
+
 #include "constants.h"
 #include "utility.h"
 #include <math.h> // fmod, M_PI
@@ -110,7 +117,7 @@ struct Coord
   Coord closestGreatCirclePoint (const Coord& start, const Coord& target) const;
 
   /* Coord Coord::destination (float heading, float distance)
-   * PURPOSE: Compute the destination point given heading and distance from this. 
+   * PURPOSE: Compute the destination point given heading and distance from this.
    *          COMPUTATION PERFORMED ALONG THE GREAT CIRCLE.
    * INPUT:
    *     float heading  : heading in RADIANS [0,2*pi[ from this.
@@ -138,10 +145,39 @@ struct Coord
    *     Coord other   : location of another body (e.g. another ship).
    *     float otherHeading : heading of the other body in RADIANS [0,2*pi[
    * OUTPUT:
-   *     (Coord) The crossing point between the two great circles, which is 
+   *     (Coord) The crossing point between the two great circles, which is
    *             nearest to the current point.
    */
   Coord crossingPoint (float heading, Coord other, float otherHeading) const;
+
+#ifndef ARDUINO
+  friend std::ostream &operator<<(std::ostream &output, const Coord &coord)
+  {
+    std::string northOrSouth;
+    if (coord.latd > 0)
+    {
+      northOrSouth = "N";
+    }
+    else
+    {
+      northOrSouth = "S";
+    }
+
+    std::string eastOrWest;
+    if (coord.lond > 0)
+    {
+      eastOrWest = "E";
+    }
+    else
+    {
+      eastOrWest = "W";
+    }
+
+    output << "(" << std::fixed << std::setprecision(6) << 
+    coord.latd << northOrSouth << ", " << coord.lond << eastOrWest << ")";
+    return output;
+  }
+#endif
 };
 
 /* float angleBetweenBearings(const float b1, const float b2)
