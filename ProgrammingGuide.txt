@@ -8,7 +8,7 @@ WORKFLOW SYNOPSIS:
    (this only has to be done once on a given computer!):
    $ git clone https://github.com/helsinkiAUV/auv.git
 
-2.0. Edit the files. 
+2.0. Edit the files 
    Make local commits:
    2.1. $ git status # Check the status of the files.
        * Additionally, you can see the differences you've made by
