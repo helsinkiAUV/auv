@@ -19,7 +19,7 @@ EXECUTABLES = atlanticSimulator
 
 # Atlantic simulator:
 ATLANTIC_SIM_DEPS = atlanticSimulator.cpp GpsSimulator.cpp \
-                    $(ARDU_SRC)/Gps.cpp
+                    $(ARDU_SRC)/Gps.cpp $(ARDU_SRC)/Coord.cpp $(ARDU_SRC)/utility.cpp
 
 # ---------TARGETS-------------
 # Do not play wth object files, since these programs will
