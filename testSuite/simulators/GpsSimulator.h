@@ -30,14 +30,14 @@
 class GpsSimulator : public Gps
 {
 public:
-	GpsSimulator (Coord currentPoint, double bs, double ds, int wd, double dt, int heading, double acc) :
-			_currentPoint(currentPoint), _boatSpeed(bs), _driftSpeed(ds), _windDir(wd * M_PI / 180.0), _dt(dt), _heading(
+	GpsSimulator (Coord current, double bs, double ds, int wd, double dt, int heading, double acc) :
+			_current(current), _boatSpeed(bs), _driftSpeed(ds), _windDir(wd * M_PI / 180.0), _dt(dt), _heading(
 					heading * M_PI / 180.0), _accuracy(acc)
 	{
 	}
 
 	/* Coord GpsSimulator::read() const
-	 * PURPOSE: To give gps coordinates randomized in the vicinity of the currentPoint point.
+	 * PURPOSE: To give gps coordinates randomized in the vicinity of the current point.
 	 *          Random distribution only affected by _accuracy.
 	 * OUTPUT:
 	 *     (Coord) random reading.
@@ -112,7 +112,7 @@ public:
 	}
 
 private:
-	Coord _currentPoint; // Current point.
+	Coord _current; // Current point.
 	double _boatSpeed; // Speed of boat in m/s.
 	double _driftSpeed; // Speed of unwanted drift [m/s] into the direction of wind.
 	double _windDir; // RADIANS where the wind is blowing.
