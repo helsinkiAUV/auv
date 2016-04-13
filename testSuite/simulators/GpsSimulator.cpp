@@ -23,6 +23,17 @@
 #include <math.h>
 #include "GpsSimulator.h"
 
+
+Coord GpsSimulator::getCurrentPoint() const
+{
+	return this->_currentPoint;
+}
+
+void GpsSimulator::setCurrentPoint(Coord point)
+{
+	this->_currentPoint = point;
+}
+
 Coord GpsSimulator::read () const
 {   // Korjaa tama funktio.
 	return Coord(1,1);
@@ -30,7 +41,16 @@ Coord GpsSimulator::read () const
 
 void GpsSimulator::moveToNextPoint ()
 {   // Korjaa tamakin funktio. VINKKI: Coord::destination(heading, distance).
-	return;
+	//double _boatSpeed; // Speed of boat in m/s.
+	//double _driftSpeed; // Speed of unwanted drift [m/s] into the direction of wind.
+	//double _windDir; // RADIANS where the wind is blowing.
+	//double _dt; // Seconds;
+
+	Coord initialPoint = this->getCurrentPoint();	//if this is needed for the algorithm
+	float heading = M_PI/2; //RAD
+	float distance = 13; //meters
+
+	this->setCurrentPoint(initialPoint.destination(heading,distance));
 }
 
 

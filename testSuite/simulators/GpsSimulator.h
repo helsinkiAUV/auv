@@ -29,9 +29,20 @@
 
 class GpsSimulator : public Gps
 {
-public:
-	GpsSimulator (Coord current, double bs, double ds, int wd, double dt, int heading, double acc) :
-			_current(current), _boatSpeed(bs), _driftSpeed(ds), _windDir(wd * M_PI / 180.0), _dt(dt), _heading(
+
+	private:
+	Coord _currentPoint; // Current point.
+	double _boatSpeed; // Speed of boat in m/s.
+	double _driftSpeed; // Speed of unwanted drift [m/s] into the direction of wind.
+	double _windDir; // RADIANS where the wind is blowing.
+	double _dt; // Seconds;
+	double _heading; // [0,2*pi[;
+	double _accuracy; // Meters
+
+
+	public:
+	GpsSimulator (Coord currentPoint, double bs, double ds, int wd, double dt, int heading, double acc) :
+			_currentPoint(currentPoint), _boatSpeed(bs), _driftSpeed(ds), _windDir(wd * M_PI / 180.0), _dt(dt), _heading(
 					heading * M_PI / 180.0), _accuracy(acc)
 	{
 	}
@@ -50,6 +61,9 @@ public:
 	void moveToNextPoint ();
 
 	// Getters and setters:
+
+	Coord getCurrentPoint() const;
+	void setCurrentPoint(Coord point);
 
 	double getAccuracy () const
 	{
@@ -111,14 +125,6 @@ public:
 		_windDir = windDir;
 	}
 
-private:
-	Coord _current; // Current point.
-	double _boatSpeed; // Speed of boat in m/s.
-	double _driftSpeed; // Speed of unwanted drift [m/s] into the direction of wind.
-	double _windDir; // RADIANS where the wind is blowing.
-	double _dt; // Seconds;
-	double _heading; // [0,2*pi[;
-	double _accuracy; // Meters
 };
 
 #endif /* GPSSIMULATOR_H_ */
