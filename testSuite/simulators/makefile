@@ -7,7 +7,7 @@ CC = g++
 ARDU_SRC = ../../mainProgram
 
 # Compiler flags.
-CFLAGS = -O0 -g3 -Wall -I$(ARDU_SRC) -D SIMULATOR
+CFLAGS = -O0 -g3 -Wall -I$(ARDU_SRC) -std=c++1y -D SIMULATOR
 
 # Build command.
 BUILD_CMD = $(CC) -o $@ $(CFLAGS) $^
