@@ -45,11 +45,12 @@ void GpsSimulator::moveToNextPoint ()
 	//double _driftSpeed; // Speed of unwanted drift [m/s] into the direction of wind.
 	//double _windDir; // RADIANS where the wind is blowing.
 	//double _dt; // Seconds;
+	//double _heading; // [0,2*pi[;
 
-	Coord initialPoint = this->getCurrentPoint();	//if this is needed for the algorithm
-	float heading = M_PI/2; //RAD
-	float distance = 13; //meters
-
+	Coord initialPoint = this->getCurrentPoint();
+	double heading = this->getHeading(); 
+	double distance = (this->getBoatSpeed() + this->getDriftSpeed())*this->getDt();
+	
 	this->setCurrentPoint(initialPoint.destination(heading,distance));
 }
 
