@@ -121,3 +121,31 @@ Coord Coord::closestGreatCirclePoint (const Coord& start, const Coord& target) c
   float projectedPoint[3] = { thisCoord[0] - d * n[0], thisCoord[1] - d * n[1], thisCoord[2] - d * n[2] };
   return convertToCoord(projectedPoint);
 }
+
+Coord Coord::crossingPoint (float heading, Coord other, float otherHeading) const
+{
+  float greatCircleThis[3];
+  float greatCircleOther[3];
+
+  greatCircleVector(heading, *this, greatCircleThis);
+  greatCircleVector(otherHeading, *this, greatCircleOther);
+
+  float crossingPoint1[3];
+  float crossingPoint2[3];
+  
+  crossProduct(greatCircleThis,greatCircleOther,crossingPoint1);
+  crossProduct(greatCircleOther,greatCircleThis,crossingPoint2);
+  
+  Coord candidate1 = convertToCoord(crossingPoint1);
+  Coord candidate2 = convertToCoord(crossingPoint2);
+  
+  if (distanceTo(candidate1) < distanceTo(candidate2))
+  {
+	  return candidate1;
+  }
+  else
+  {
+	  return candidate2;
+  }
+  
+}
