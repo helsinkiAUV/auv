@@ -51,15 +51,15 @@ Coord GpsSimulator::read () const
 }
 
 void GpsSimulator::moveToNextPoint ()
-{   // Korjaa tamakin funktio. VINKKI: Coord::destination(heading, distance).
-	//double _boatSpeed; // Speed of boat in m/s.
-	//double _driftSpeed; // Speed of unwanted drift [m/s] into the direction of wind.
-	//double _windDir; // RADIANS where the wind is blowing.
-	//double _dt; // Seconds;
+{   
+	Coord initialPoint = this->getCurrentPoint();
+	double boatDirection = this->getHeading();
+	double windDirection = this->getWindDir();
+	double idealDistance = this->getBoatSpeed()*this->getDt(); //s = v*t
+	double driftDistance = this->getDriftSpeed()*this->getDt();
 
-	Coord initialPoint = this->getCurrentPoint();	//if this is needed for the algorithm
-	float heading = M_PI/2; //RAD
-	float distance = 13; //meters
-
-	this->setCurrentPoint(initialPoint.destination(heading,distance));
+	//move the boat first to the ideal point
+	this->setCurrentPoint(initialPoint.destination(boatDirection,idealDistance));
+	//and then to the point with drift
+	this->setCurrentPoint(initialPoint.destination(windDirection,driftDistance));
 }
