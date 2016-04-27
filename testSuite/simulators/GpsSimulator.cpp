@@ -52,14 +52,14 @@ Coord GpsSimulator::read () const
 
 void GpsSimulator::moveToNextPoint ()
 {   
-	Coord initialPoint = this->getCurrentPoint();
 	double boatDirection = this->getHeading();
 	double windDirection = this->getWindDir();
 	double idealDistance = this->getBoatSpeed()*this->getDt(); //s = v*t
 	double driftDistance = this->getDriftSpeed()*this->getDt();
 
-	//move the boat first to the ideal point
-	this->setCurrentPoint(initialPoint.destination(boatDirection,idealDistance));
+	//move the boat first to the ideal point disregarding the drift.
+	Coord noDriftCoord = _currentPoint.destination(boatDirection, idealDistance);
 	//and then to the point with drift
-	this->setCurrentPoint(initialPoint.destination(windDirection + M_PI,driftDistance));
+	Coord withDriftCoord = noDriftCoord.destination(windDirection + M_PI, driftDistance);
+	return withDriftCoord;
 }
