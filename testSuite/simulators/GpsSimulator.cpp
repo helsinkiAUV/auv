@@ -61,5 +61,5 @@ void GpsSimulator::moveToNextPoint ()
 	//move the boat first to the ideal point
 	this->setCurrentPoint(initialPoint.destination(boatDirection,idealDistance));
 	//and then to the point with drift
-	this->setCurrentPoint(initialPoint.destination(windDirection,driftDistance));
+	this->setCurrentPoint(initialPoint.destination(windDirection + M_PI,driftDistance));
 }
