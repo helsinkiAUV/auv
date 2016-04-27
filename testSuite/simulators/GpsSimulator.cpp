@@ -22,18 +22,24 @@
 
 #include <math.h>
 #include "GpsSimulator.h"
+#include <ctime>
+#include <random>
 
 Coord GpsSimulator::read () const
-{   // Korjaa tama funktio.
-	return Coord(1,1);
+{   
+	double pi = 3.1415926535897932384626433;
+	
+	std::mt19937 generator (time(NULL));
+	std::uniform_real_distribution<double> randomNumber(0.0, 1.0);
+	std::normal_distribution<double> randomUniform(0.0, _accuracy);
+
+	double heading = 2.0*pi*randomNumber(generator);
+	double distance = std::abs(randomUniform(generator));
+
+	return _current.destination(heading, distance);
 }
 
 void GpsSimulator::moveToNextPoint ()
 {   // Korjaa tamakin funktio. VINKKI: Coord::destination(heading, distance).
 	return;
 }
-
-
-
-
-
