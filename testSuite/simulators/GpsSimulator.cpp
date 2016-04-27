@@ -47,7 +47,7 @@ Coord GpsSimulator::read () const
 	double heading = 2.0*pi*randomNumber(generator);
 	double distance = std::abs(randomUniform(generator));
 
-	return _current.destination(heading, distance);
+	return _currentPoint.destination(heading, distance);
 }
 
 void GpsSimulator::moveToNextPoint ()
