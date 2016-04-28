@@ -148,7 +148,7 @@ struct Coord
    *     (Coord) The crossing point between the two great circles, which is
    *             nearest to the current point.
    */
-  Coord crossingPoint (float heading, Coord other, float otherHeading) const;
+  Coord crossingPoint (float heading, const Coord& other, float otherHeading) const;
 
 #ifndef ARDUINO
   friend std::ostream &operator<<(std::ostream &output, const Coord &coord)

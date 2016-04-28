@@ -25,12 +25,13 @@
 
 #include <math.h>
 #include "Coord.h"
+class Coord;
 
 /* void crossProduct (float v0[3], float v1[3], float n[3])
  * PURPOSE: Computes cross product of v0 x v1 and stores the result into n.
  */
 void crossProduct (float v0[3], float v1[3], float n[3]);
 	
-void greatCircleVector (float heading, Coord& current, float out[3]);
+void greatCircleVector (float heading, const Coord& current, float out[3]);
 
 #endif /* UTILITY_H_ */

@@ -61,5 +61,5 @@ void GpsSimulator::moveToNextPoint ()
 	Coord noDriftCoord = _currentPoint.destination(boatDirection, idealDistance);
 	//and then to the point with drift
 	Coord withDriftCoord = noDriftCoord.destination(windDirection + M_PI, driftDistance);
-	return withDriftCoord;
+	_currentPoint = withDriftCoord;
 }

@@ -122,7 +122,7 @@ Coord Coord::closestGreatCirclePoint (const Coord& start, const Coord& target) c
   return convertToCoord(projectedPoint);
 }
 
-Coord Coord::crossingPoint (float heading, Coord other, float otherHeading) const
+Coord Coord::crossingPoint (float heading, const Coord& other, float otherHeading) const
 {
   float greatCircleThis[3];
   float greatCircleOther[3];

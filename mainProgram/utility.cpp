@@ -22,6 +22,7 @@
 
 #include "auv.h"
 #include "utility.h"
+#include "Coord.h"
 
 void crossProduct (float v0[3], float v1[3], float n[3])
 {
@@ -32,10 +33,9 @@ void crossProduct (float v0[3], float v1[3], float n[3])
   n[2] = x0 * y1 - y0 * x1;
 }
 
-void greatCircleVector (float heading, Coord& current, float out[3])
+void greatCircleVector (float heading, const Coord& current, float out[3])
 {
   out[0] = current.sinLon*cos(heading)-current.sinLat*current.cosLon*sin(heading); 
   out[1] = -current.cosLon*cos(heading)-current.sinLat*current.sinLon*sin(heading); 
-  out[2] = current.cosLat*sin(heading)
-	
+  out[2] = current.cosLat*sin(heading);
 }
