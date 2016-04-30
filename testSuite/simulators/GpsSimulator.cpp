@@ -41,11 +41,11 @@ Coord GpsSimulator::read () const
 	double pi = 3.1415926535897932384626433;
 	
 	std::mt19937 generator (time(NULL));
-	std::uniform_real_distribution<double> randomNumber(0.0, 1.0);
-	std::normal_distribution<double> randomUniform(0.0, _accuracy);
+	std::uniform_real_distribution<double> randomUniform(0.0, 1.0);
+	std::normal_distribution<double> randomNormal(0.0, _accuracy);
 
-	double heading = 2.0*pi*randomNumber(generator);
-	double distance = std::abs(randomUniform(generator));
+	double heading = 2.0*pi*randomUniform(generator);
+	double distance = std::abs(randomNormal(generator));
 
 	return _currentPoint.destination(heading, distance);
 }
