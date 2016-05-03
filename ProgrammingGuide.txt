@@ -27,8 +27,16 @@ WORKFLOW SYNOPSIS:
    2.5. Make sure you have no changes to commit. If not, then
         $ git pull --rebase origin master # Synchronize with the GitHub repo. DO THIS BEFORE YOU PUSH!
        * In case of merge conflicts, go talk to the author of the specific file.
-   2.6. $ git push origin master # Push changes to GitHub.
+   2.6. $ git push origin <localBranch>:<contributorName>_<featureName> # Push changes to GitHub.
+       * For example: git push origin master:juho_GPSsimulator
        * If the feature doesn't work, keep developing it locally.
+   2.7. Goto our GitHub repo, select "Code"->"## branches"-> Click on your recent branch -> "New Pull Request".
+       * Write some additional information if you have to. Then "Create Pull Request".
+   2.8. Your feature will no be reviewed by some other developer before merging into the
+        master branch. Please do not merge them yourself unless it's something very trivial,
+        since this is how we peer review our code.
+       * "Given enough eyeballs, all bugs are shallow." - Linus Torvalds
+       
 
 
 NOTES ON PROGRAMMING STYLE:
