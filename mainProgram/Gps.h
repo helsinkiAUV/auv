@@ -46,6 +46,7 @@ class Gps
     virtual Coord read () const;
 
     int shutDown () const;
+
     int turnOn () const;
 };
 
