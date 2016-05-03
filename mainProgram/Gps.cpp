@@ -35,4 +35,16 @@ Coord Gps::averageCoordinate (int numPoints = gpsNumOfAveragingPoints) const
   return read();
 }
 
+int Gps::shutDown () const
+{
+  // KORJAA!
+  return 0;
+}
+
+int Gps::turnOn () const
+{
+  // KORJAA!
+  return 0;
+}
+
 

@@ -41,9 +41,12 @@ class Gps
 
     /* virtual Coord Gps::read() const
      * PURPOSE: Reads in the current GPS coordinate.
-     * NOTE: Overloaded in ../testSuite/GpsSimulator.h -> GpsSimulator
+     * NOTE: Overloaded in testSuite's GpsSimulator
      */
     virtual Coord read () const;
+
+    int shutDown () const;
+    int turnOn () const;
 };
 
 #endif /* GPS_H_ */
