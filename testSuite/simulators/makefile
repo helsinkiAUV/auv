@@ -4,7 +4,7 @@
 CC = g++
 
 # Location of Arduino sources.
-ARDU_SRC = ../../mainProgram
+ARDU_SRC = ../../arduinoMain
 
 # Compiler flags.
 CFLAGS = -O0 -g3 -Wall -I$(ARDU_SRC) -std=c++1y -D SIMULATOR
