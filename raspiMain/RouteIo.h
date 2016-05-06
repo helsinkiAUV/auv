@@ -32,35 +32,84 @@
 #include <limits>
 #include "Coord.h"
 
+/* class RouteIo
+ * PURPOSE: Perform reading and writing of GPS waypoints.
+ * INPUT FILE FORMAT:
+ * 		latitude, longitude, maxCTE, maxPassDist [degrees, degrees, meters, meters]
+ * OUTPUT FILE FORMAT:
+ * 		YYYYMMDDHHMMSS, latitude, longitude, CTEratio [UTC time, degrees, degrees, unitless]
+ */
 class RouteIo
 {
 private:
-	std::vector<Coord> _waypoints;
-	std::vector<double> _maxCTEs;
-	std::vector<double> _maxPassDists;
-	int _currentTarget; // One-based indexing!
+	std::vector<Coord> _waypoints; // List of coordinates.
+	std::vector<double> _maxCTEs; // Maximum cross-track errors.
+	std::vector<double> _maxPassDists; // Waypoint radius.
+	int _currentTarget; // Current target waypoint. One-based indexing!
 
-	std::string _outputName;
+	std::string _outputName; // Output file.
 
 public:
+	/* RouteIo (std::ifstream& inputFile, std::string outputName)
+	 * PURPOSE: Constructor
+	 * INPUT:
+	 * 		ifstream& inputFile : Reference to an input file stream.
+	 * 		string outputName   : Name of the output file.
+	 */
 	RouteIo (std::ifstream& inputFile, std::string outputName);
 
+	/* 	Coord getCurrentTargetCoord() const
+	 *	double getCurrentMaxCTE() const
+	 *	double getCurrentMaxPassDist() const
+	 *
+	 *	PURPOSE: Get properties of the current target waypoint.
+	 */
 	Coord getCurrentTargetCoord() const;
 	double getCurrentMaxCTE() const;
 	double getCurrentMaxPassDist() const;
 
+	/*  void moveToNextPoint()
+	 *  Increase _currentTarget by one, thus moving to the next waypoint.
+	 */
 	void moveToNextPoint();
 
-	// One-based indexing.
+	/* 	Coord getTargetCoord(int waypointNum) const;
+	 *  double getMaxCTE(int waypointNum) const;
+	 *  double getMaxPassDist(int waypointNum) const;
+	 *
+	 *	PURPOSE: Get properties of a specific waypoint.
+	 *	INPUT:
+	 *		int waypointNum : Number of waypoint. ONE_BASED INDEXING!
+	 *						  [1, numWaypoints()]!
+	 */
 	Coord getTargetCoord(int waypointNum) const;
 	double getMaxCTE(int waypointNum) const;
 	double getMaxPassDist(int waypointNum) const;
 
+	/*  int numWaypoints() const
+	 *  PURPOSE: Return the total number of waypoints.
+	 */
 	int numWaypoints() const;
+
+	/*  int currentWaypointNum() const
+	 *  PURPOSE: Return the current waypoint.
+	 */
 	int currentWaypointNum() const;
 
+	/*  bool reachedFinalPoint() const
+	 *  PURPOSE: Check whether we have reached the final waypoint.
+	 *  		 Returns "true", if currentWaypointNum() > numWaypoints()
+	 */
 	bool reachedFinalPoint() const;
 
+	/* void write (std::string timeStamp, Coord coordinate, double crossTrackErr, double maxCTE)
+	 * PURPOSE: Write coordinate output to the file.
+	 * INPUT:
+	 * 		string timestamp     : Timestamp string as returned by getTimeString().
+	 * 		Coord coordinate     : Coordinate point to write.
+	 * 		double crossTrackErr : Cross-track error.
+	 * 		double maxCTE        : Maximum cross-track error.
+	 */
 	void write (std::string timeStamp, Coord coordinate, double crossTrackErr, double maxCTE);
 };
 

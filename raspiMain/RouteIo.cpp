@@ -120,33 +120,38 @@ bool RouteIo::reachedFinalPoint() const
 	return currentWaypointNum() > numWaypoints();
 }
 
-void RouteIo::write (std::string timeStamp, Coord coordinate, double crossTrackErr, double maxCTE)
+void RouteIo::write(std::string timeStamp, Coord coordinate,
+		double crossTrackErr, double maxCTE)
 {
+	double CTEratio = crossTrackErr / maxCTE;
 	std::ofstream outputFile(_outputName, std::ios::app); // Open file for appending.
+
 	if (outputFile.fail()) // Appending operation failed.
 	{ // TODO: Write this exception to the general error log.
-		outputFile = std::ofstream(_outputName, std::ios::trunc); // Attempt to create a new file.
-	}
+		std::ofstream newFile(_outputName, std::ios::trunc); // Attempt to create a new file.
 
-	double CTEratio = crossTrackErr / maxCTE;
+		newFile << "UTC,latitude,longitude,CTEratio" << std::endl; // Write header info.
 
-	if (outputFile.is_open())
-	{
 		// Always show exactly 8 digits after the decimal point and never use scientific notation.
-		outputFile.setf( std::ios::fixed, std:: ios::floatfield );
-		outputFile.precision(8);
+		newFile.setf(std::ios::fixed, std::ios::floatfield);
+		newFile.precision(8);
 
-		outputFile << timeStamp << ","
-				   << coordinate.latd << ","
-				   << coordinate.lond << ","
-				   << CTEratio << std::endl;
-		outputFile.close();
-	}
-	else
-	{
-		// TODO: Some very severe error!
+		newFile << timeStamp << "," << coordinate.latd << "," << coordinate.lond
+				<< "," << CTEratio << std::endl;
+		newFile.close();
+		return;
 	}
 
+	// The following may look like futile code replication, but it's needed to circumvent
+	// a bug in g++-4.8's ofstream implementation (invalid copy constructor).
+
+	// Always show exactly 8 digits after the decimal point and never use scientific notation.
+	outputFile.setf(std::ios::fixed, std::ios::floatfield);
+	outputFile.precision(8);
+
+	outputFile << timeStamp << "," << coordinate.latd << "," << coordinate.lond
+			<< "," << CTEratio << std::endl;
+	outputFile.close();
 
 }
 

@@ -104,9 +104,37 @@ struct Coord
    */
   bool leftOfTheGreatCircle (const Coord& start, const Coord& target) const;
 
+  /* float angularCrossTrackError (const Coord& start, const Coord& target) const
+   * PURPOSE: Compute the Cross-track error (distance to closest point on the great circle)
+   * 		  in RADIANS.
+   * INPUT:
+   * 	Coord start   : Coordinates of the initial point (usually the previous waypoint).
+   *    Coord target  : Coordinates of the target point.
+   * OUTPUT:
+   * 	(float) Cross-track error in RADIANS.
+   */
   float angularCrossTrackError (const Coord& start, const Coord& target) const;
+
+  /* float crossTrackError (const Coord& start, const Coord& target) const
+   * PURPOSE: Compute the Cross-track error (distance to closest point on the great circle)
+   * 		  in METERS.
+   * INPUT:
+   * 	Coord start   : Coordinates of the initial point (usually the previous waypoint).
+   *    Coord target  : Coordinates of the target point.
+   * OUTPUT:
+   * 	(float) Cross-track error in METERS.
+   */
   float crossTrackError (const Coord& start, const Coord& target) const;
 
+  /* float alongTrackDistance (const Coord& start, const Coord& target) const
+   * PURPOSE: Compute the distance from start to *this projected to the great circle
+   * 		  between start and target.
+   * INPUT:
+   * 	Coord start   : Coordinates of the initial point (usually the previous waypoint).
+   *    Coord target  : Coordinates of the target point.
+   * OUTPUT:
+   * 	(float) Along-track distance in METERS.
+   */
   float alongTrackDistance (const Coord& start, const Coord& target) const;
 
   /* Coord Coord::closestGreatCirclePoint (const Coord& start, const Coord& target) const
@@ -205,6 +233,16 @@ float angleBetweenBearings (const float b1, const float b2);
  */
 Coord convertToCoord (float xyz[3]);
 
+/* Coord intermediatePoint (const Coord& start, const Coord& target, float fraction)
+ * PURPOSE: To compute the point "fraction" away from start (i.e. fraction = 0 is start
+ * 			and fraction = 1 is target).
+ * INPUT:
+ *     Coord start    : Coordinates of the initial point (usually the previous waypoint).
+ *     Coord target   : Coordinates of the target point.
+ *     float fraction : [0,1] fraction along the great circle.
+ * OUTPUT:
+ *     (Coord) The point laying "fraction" away from start along the great circle.
+ */
 Coord intermediatePoint (const Coord& start, const Coord& target, float fraction);
 
 

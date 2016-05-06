@@ -51,7 +51,7 @@ int main (int argc, char **argv)
 	RouteIo routeIo (inputFile, outputName);
 
 	double boatSpeed = 0.8; // Speed of boat in m/s.
-	double driftSpeed = 0.6; // Speed of unwanted drift [m/s] into the direction of wind.
+	double driftSpeed = 0.15; // Speed of unwanted drift [m/s] into the direction of wind.
 	double windDir = 45; // DEGREES where the wind is blowing.
 	double dt = 300; // Seconds;
 	double heading = 45; // [0,360[;
@@ -78,7 +78,6 @@ int main (int argc, char **argv)
 		int outOfTrackPoints = 0;
 		int maxOoTPoints = 100;
 		current = gpsMock.averageCoordinate(numAver);
-		std::cout << current.distanceTo(start) << std::endl;
 		Coord previous = current;
 
 		double timeOfLastWrite = 0;
@@ -122,9 +121,10 @@ int main (int argc, char **argv)
 	}
 
 	std::cout << "Distance (km): " << simulationDistance / 1000 << std::endl;
-	std::cout << "Time (h): " << simulationTime / 3600 << std::endl << std::endl;
-
+	std::cout << "Time (h): " << simulationTime / 3600 << std::endl;
 	std::cout << "Average Speed (km/h): " << 3.6 * simulationDistance / simulationTime << std::endl;
+
+	std::cout << "Output written to: " << outputName << std::endl;
 
 
 	return 0;
