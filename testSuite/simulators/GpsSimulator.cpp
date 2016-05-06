@@ -51,15 +51,13 @@ Coord GpsSimulator::read () const
 }
 
 void GpsSimulator::moveToNextPoint ()
-{   
-	double boatDirection = this->getHeading();
-	double windDirection = this->getWindDir();
-	double idealDistance = this->getBoatSpeed()*this->getDt(); //s = v*t
-	double driftDistance = this->getDriftSpeed()*this->getDt();
+{
+	double idealDistance = _boatSpeed * _dt; //s = v*t
+	double driftDistance = _driftSpeed * _dt;
 
 	//move the boat first to the ideal point disregarding the drift.
-	Coord noDriftCoord = _currentPoint.destination(boatDirection, idealDistance);
+	Coord noDriftCoord = _currentPoint.destination(_heading, idealDistance);
 	//and then to the point with drift
-	Coord withDriftCoord = noDriftCoord.destination(windDirection + M_PI, driftDistance);
+	Coord withDriftCoord = noDriftCoord.destination(_windDir + M_PI, driftDistance);
 	_currentPoint = withDriftCoord;
 }

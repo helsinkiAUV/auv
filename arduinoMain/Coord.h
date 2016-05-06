@@ -104,6 +104,11 @@ struct Coord
    */
   bool leftOfTheGreatCircle (const Coord& start, const Coord& target) const;
 
+  float angularCrossTrackError (const Coord& start, const Coord& target) const;
+  float crossTrackError (const Coord& start, const Coord& target) const;
+
+  float alongTrackDistance (const Coord& start, const Coord& target) const;
+
   /* Coord Coord::closestGreatCirclePoint (const Coord& start, const Coord& target) const
    * PURPOSE: Computes the projection of the current point to the great circle
    *          between points start and target.
@@ -199,6 +204,8 @@ float angleBetweenBearings (const float b1, const float b2);
  *
  */
 Coord convertToCoord (float xyz[3]);
+
+Coord intermediatePoint (const Coord& start, const Coord& target, float fraction);
 
 
 #endif /* COORD_H_ */

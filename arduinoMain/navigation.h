@@ -31,7 +31,9 @@
 #define NAVIGATION_H_
 
 #include "auv.h"
+#ifdef ARDUINO
 #include "Arduino.h"
+#endif
 #include "constants.h"
 #include "Coord.h"
 #include "Gps.h"

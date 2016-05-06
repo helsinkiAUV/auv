@@ -107,22 +107,22 @@ class GpsSimulator : public Gps
 
 	int getHeading () const
 	{
-		return _heading;
+		return round(_heading * 180 / M_PI);
 	}
 
 	void setHeading (int heading)
 	{
-		_heading = heading;
+		_heading = heading * M_PI / 180.0;
 	}
 
 	int getWindDir () const
 	{
-		return _windDir;
+		return round(_windDir * 180 / M_PI);
 	}
 
 	void setWindDir (int windDir)
 	{
-		_windDir = windDir;
+		_windDir = windDir * M_PI / 180.0;
 	}
 
 };
