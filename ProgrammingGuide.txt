@@ -33,8 +33,8 @@ WORKFLOW SYNOPSIS:
    2.7. Goto our GitHub repo, select "Code"->"## branches"-> Click on your recent branch -> "New Pull Request".
        * Write some additional information if you have to. Then "Create Pull Request".
    2.8. Your feature will no be reviewed by some other developer before merging into the
-        master branch. Please do not merge them yourself unless it's something very trivial,
-        since this is how we peer review our code.
+        master branch. Please do not merge the pull requests yourself unless it's something 
+        very trivial, since this is how we peer review our code.
        * "Given enough eyeballs, all bugs are shallow." - Linus Torvalds
        
 
