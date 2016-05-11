@@ -37,6 +37,19 @@ Coord convertToCoord (float xyz[3])
   return Coord(pointLat, pointLon);
 }
 
+Coord intermediatePoint (const Coord& start, const Coord& target, float fraction)
+{
+	float gcLength = start.angularDistanceTo(target);
+	float a = sin((1-fraction) * gcLength) / sin(gcLength);
+	float b = sin(fraction * gcLength) / sin(gcLength);
+	float x = a * start.cosLat * start.cosLon + b * target.cosLat * target.cosLon;
+	float y = a * start.cosLat * start.sinLon + b * target.cosLat * target.sinLon;
+	float z = a * start.sinLat + b * target.sinLat;
+	float intermLat = atan2(z, sqrt(x*x + y*y)) * 180.0 / M_PI;
+	float intermLon = atan2(y, x) * 180.0 / M_PI;
+	return Coord(intermLat, intermLon);
+}
+
 Coord Coord::destination (float heading, float distance) const
 {
   float angDist = distance / RE;
@@ -87,6 +100,26 @@ bool Coord::leftOfTheGreatCircle (const Coord& start, const Coord& target) const
   return sin(bearing_start_this - bearing_start_target) < 0;
 }
 
+float Coord::angularCrossTrackError (const Coord& start, const Coord& target) const
+{
+	float bearingStartThis = start.bearingTo(*this);
+	float bearingStartTarget = start.bearingTo(target);
+	float distStartThis = start.angularDistanceTo(*this);
+	return asin(sin(distStartThis) * sin(bearingStartThis - bearingStartTarget));
+}
+
+float Coord::crossTrackError (const Coord& start, const Coord& target) const
+{
+	return angularCrossTrackError(start, target) * RE;
+}
+
+float Coord::alongTrackDistance (const Coord& start, const Coord& target) const
+{
+	float distStartThis = start.angularDistanceTo(*this);
+	float crossTrackDist = angularCrossTrackError(start, target);
+	return acos(cos(distStartThis) / cos(crossTrackDist)) * RE;
+}
+
 void Coord::convertToXYZ (float xyz[3]) const
 {
   xyz[0] = cosLat * cosLon;
@@ -97,29 +130,32 @@ void Coord::convertToXYZ (float xyz[3]) const
 
 Coord Coord::closestGreatCirclePoint (const Coord& start, const Coord& target) const
 {
-  // Convert coordinate points to cartesian coordinates.
-  float thisCoord[3];
-  convertToXYZ(thisCoord);
-  float startCoord[3];
-  start.convertToXYZ(startCoord);
-  float targetCoord[3];
-  target.convertToXYZ(targetCoord);
+//  // Convert coordinate points to cartesian coordinates.
+//  float thisCoord[3];
+//  convertToXYZ(thisCoord);
+//  float startCoord[3];
+//  start.convertToXYZ(startCoord);
+//  float targetCoord[3];
+//  target.convertToXYZ(targetCoord);
+//
+//  // Compute the normal vector for the plane given by start and target points (and origin).
+//  float n[3];
+//  crossProduct(startCoord, targetCoord, n);
+//  float nLen = sqrt(n[0] * n[0] + n[1] * n[1] + n[2] * n[2]);
+//  // Normalize the normal vector.
+//  n[0] /= nLen;
+//  n[1] /= nLen;
+//  n[2] /= nLen;
+//
+//  // Distance from the current point to the plane = dot(n, this)
+//  float d = thisCoord[0] * n[0] + thisCoord[1] * n[1] + thisCoord[2] * n[2];
+//
+//  // Projection of the current point to the plane = this - d*n.
+//  float projectedPoint[3] = { thisCoord[0] - d * n[0], thisCoord[1] - d * n[1], thisCoord[2] - d * n[2] };
+//  return convertToCoord(projectedPoint);
 
-  // Compute the normal vector for the plane given by start and target points (and origin).
-  float n[3];
-  crossProduct(startCoord, targetCoord, n);
-  float nLen = sqrt(n[0] * n[0] + n[1] * n[1] + n[2] * n[2]);
-  // Normalize the normal vector.
-  n[0] /= nLen;
-  n[1] /= nLen;
-  n[2] /= nLen;
-
-  // Distance from the current point to the plane = dot(n, this)
-  float d = thisCoord[0] * n[0] + thisCoord[1] * n[1] + thisCoord[2] * n[2];
-
-  // Projection of the current point to the plane = this - d*n.
-  float projectedPoint[3] = { thisCoord[0] - d * n[0], thisCoord[1] - d * n[1], thisCoord[2] - d * n[2] };
-  return convertToCoord(projectedPoint);
+	float fraction = alongTrackDistance(start, target) / start.distanceTo(target);
+	return intermediatePoint(start, target, fraction);
 }
 
 Coord Coord::crossingPoint (float heading, const Coord& other, float otherHeading) const

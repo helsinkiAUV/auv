@@ -1,4 +1,4 @@
-# This .gitignore will only track makefiles and files with extensions *.cpp, *.h, *.py and *.ino
+# This .gitignore will only track makefiles and files with extensions *.csv, *.cpp, *.h, *.py and *.ino
 
 # Blacklist everything
 *
@@ -10,7 +10,10 @@
 !Makefile
 
 # Whitelist the specific file extensions
+!*.csv
 !*.cpp
 !*.h
 !*.py
 !*.ino
+
+*._simOut.csv

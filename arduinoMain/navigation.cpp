@@ -54,16 +54,16 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
   else
   {
     // Distance away from which the auv will begin approaching closer to the target.
-    float approachRange = fmax(distStartToTarget - 5 * maxPassDist, 0.0);
+    float approachDistance = fmax(distStartToTarget - 5 * maxPassDist, 0.0);
     float distToForbidZoneFromGc; // Distance from the great circle (between start and target) to the boundary of the forbidden zone.
-    if (distStartToProj < approachRange)
+    if (distStartToProj < approachDistance)
     {
       distToForbidZoneFromGc = maxCrossTrackErr;
     }
     else // On approach to target.
     {
       // Slope of approach.
-      float appSlope = (maxCrossTrackErr - maxPassDist) / (maxPassDist - approachRange);
+      float appSlope = (maxCrossTrackErr - maxPassDist) / (maxPassDist - approachDistance);
       distToForbidZoneFromGc = maxPassDist + appSlope * (distStartToProj - (distStartToTarget - maxPassDist));
     }
 
@@ -71,9 +71,21 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
     float bearingToTarget = current.bearingTo(target);
     float bearingToProjection = current.bearingTo(projectionToGc);
 
-    // The larger the cross-track error, the steeper we approach the great circle.
-    // Correction is negative if on the right side of the great circle.
-    float correctionAngle = fmin((crossTrackErr / distToForbidZoneFromGc), 1.0) * angleBetweenBearings(bearingToProjection, bearingToTarget);
+    float cteRatio = crossTrackErr / distToForbidZoneFromGc;
+    float correctionAngle;
+    if (cteRatio > 0.05) // Significantly off of the great circle.
+    {
+        // The larger the cross-track error, the steeper we approach the great circle.
+        // Correction is negative if on the right side of the great circle.
+    	// The boat will head perpendicular to the track, if cteRatio >= 0.75 (1.0 is the
+    	// forbidden zone limit).
+    	correctionAngle = fmin(cteRatio * 4.0 / 3.0, 1.0) * angleBetweenBearings(bearingToProjection, bearingToTarget);
+    }
+    else // Near the great circle.
+    {
+    	correctionAngle = 0.0;
+    }
+
     nextBearing = (int) ((bearingToTarget + correctionAngle) * 180.0 / M_PI);
     if (nextBearing >= 360) nextBearing -= 360;
     if (nextBearing < 0) nextBearing += 360;
@@ -81,5 +93,6 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
     inForbiddenZone = crossTrackErr > distToForbidZoneFromGc;
     return;
   }
+
 }
 
