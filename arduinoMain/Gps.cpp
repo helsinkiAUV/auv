@@ -23,13 +23,13 @@
 #include "auv.h"
 #include "Gps.h"
 
-Coord Gps::read() const
+Coord Gps::read()
 {
   // KORJAA!
   return Coord(0, 0);
 }
 
-Coord Gps::averageCoordinate (int numPoints) const
+Coord Gps::averageCoordinate (int numPoints)
 {
   Coord origin = read();
   if( numPoints == 1)

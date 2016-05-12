@@ -37,13 +37,13 @@ class Gps
    /* Coord Gps::averageCoordinate () const
     * PURPOSE: Return weigted average coordinate, which represents the best guess of the current position.
     */
-    Coord averageCoordinate (int numPoints) const;
+    Coord averageCoordinate (int numPoints);
 
-    /* virtual Coord Gps::read() const
+    /* virtual Coord Gps::read()
      * PURPOSE: Reads in the current GPS coordinate.
      * NOTE: Overloaded in testSuite's GpsSimulator
      */
-    virtual Coord read () const;
+    virtual Coord read ();
 
     int shutDown () const;
 

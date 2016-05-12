@@ -20,19 +20,21 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
  
- #include <iostream>
+#include <iostream>
+#include "Coord.h"
+#include "GpsSimulator.h"
  
  int main()
  {
 	Coord current(60,25);
 	float GpsAccuracy = 10;
-    GpsSimulator gpsMock(current, 0, 0, 0, 0, 0, GpsAccuracy);
+	GpsSimulator gpsMock(current, 0, 0, 0, 0, 0, GpsAccuracy);
 	int numAver = 10;
 	
 	Coord estimate = gpsMock.averageCoordinate(numAver);
 	float distance = current.distanceTo(estimate);
 	
-	std::cout << "GPS accuracy: " << GpsAccuracy << "/n";
-	std::cout << "Num averaging points: " << numAver << "/n";
-	std::cout << "Distance to real: " << distance << "/n";
+	std::cout << "GPS accuracy: " << GpsAccuracy << std::endl;
+	std::cout << "Num averaging points: " << numAver << std::endl;
+	std::cout << "Distance to real: " << distance << std::endl;
  }

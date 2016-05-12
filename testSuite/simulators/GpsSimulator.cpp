@@ -22,9 +22,6 @@
 
 #include <math.h>
 #include "GpsSimulator.h"
-#include <ctime>
-#include <random>
-
 
 Coord GpsSimulator::getCurrentPoint() const
 {
@@ -36,21 +33,18 @@ void GpsSimulator::setCurrentPoint(Coord point)
 	this->_currentPoint = point;
 }
 
-Coord GpsSimulator::read () const
-{   
-	double pi = 3.1415926535897932384626433;
-	
-	std::mt19937 generator (time(NULL));
+Coord GpsSimulator::read()
+{
 	std::uniform_real_distribution<double> randomUniform(0.0, 1.0);
 	std::normal_distribution<double> randomNormal(0.0, _accuracy);
 
-	double heading = 2.0*pi*randomUniform(generator);
-	double distance = std::abs(randomNormal(generator));
+	double heading = 2.0 * M_PI * randomUniform(_generator);
+	double distance = std::abs(randomNormal(_generator));
 
 	return _currentPoint.destination(heading, distance);
 }
 
-void GpsSimulator::moveToNextPoint ()
+void GpsSimulator::moveToNextPoint()
 {
 	double idealDistance = _boatSpeed * _dt; //s = v*t
 	double driftDistance = _driftSpeed * _dt;
@@ -58,6 +52,7 @@ void GpsSimulator::moveToNextPoint ()
 	//move the boat first to the ideal point disregarding the drift.
 	Coord noDriftCoord = _currentPoint.destination(_heading, idealDistance);
 	//and then to the point with drift
-	Coord withDriftCoord = noDriftCoord.destination(_windDir + M_PI, driftDistance);
+	Coord withDriftCoord = noDriftCoord.destination(_windDir + M_PI,
+			driftDistance);
 	_currentPoint = withDriftCoord;
 }

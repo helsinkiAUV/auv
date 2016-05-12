@@ -26,6 +26,8 @@
 #include "Coord.h"
 #include "Gps.h"
 #include <math.h>
+#include <ctime>
+#include <random>
 
 class GpsSimulator : public Gps
 {
@@ -38,22 +40,23 @@ class GpsSimulator : public Gps
 	double _dt; // Seconds;
 	double _heading; // [0,2*pi[;
 	double _accuracy; // Meters
+	std::mt19937 _generator; // Random generator.
 
 
 	public:
 	GpsSimulator (Coord currentPoint, double bs, double ds, int wd, double dt, int heading, double acc) :
 			_currentPoint(currentPoint), _boatSpeed(bs), _driftSpeed(ds), _windDir(wd * M_PI / 180.0), _dt(dt), _heading(
-					heading * M_PI / 180.0), _accuracy(acc)
+					heading * M_PI / 180.0), _accuracy(acc), _generator(time(nullptr))
 	{
 	}
 
-	/* Coord GpsSimulator::read() const
+	/* Coord GpsSimulator::read()
 	 * PURPOSE: To give gps coordinates randomized in the vicinity of the current point.
 	 *          Random distribution only affected by _accuracy.
 	 * OUTPUT:
 	 *     (Coord) random reading.
 	 */
-	Coord read () const;
+	Coord read ();
 
 	/* void GpsSimulator::moveToNextPoint()
 	 * PURPOSE: Move to a next point along the constant heading, taking account the drift.
