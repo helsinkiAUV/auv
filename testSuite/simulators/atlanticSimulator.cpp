@@ -46,9 +46,86 @@ int main (int argc, char **argv)
 //	std::cout << inForbiddenZone << std::endl;
 
 
+	// let's read a config file
+	// simulation file name is given as command line argument
+	std::ifstream configFile(argv[1]);
+	
+	bool configFileLoaded = false;
+
+	if(configFile) {
+		configFileLoaded = true;
+	}
+	else {
+		std::cout<<"There was a problem with opening simulation config file."<<std::endl;
+		std::cout<<"Config file names are given as command line arguments:"<<std::endl;
+		std::cout<<"> ./atlanticSimulator config.cfg "<<std::endl;
+	}
+
+	std::string fileString;
+	std::string nameString,dataString;
+
+	//simulation variables, leaving the default values still in
 	std::ifstream inputFile("../../raspiMain/route/routeAtlantic.csv");
 	std::string outputName = "../../raspiMain/route/routeAtlantic_simOut.csv";
+	
+
+	double boatSpeed = 0.8; // Speed of boat in m/s.
+	double driftSpeed = 0.15; // Speed of unwanted drift [m/s] into the direction of wind.
+	double windDir = 45; // DEGREES where the wind is blowing.
+	double dt = 300; // Seconds;
+	double heading = 45; // [0,360[;
+	double GpsAccuracy = 5; // Meters
+	double writeInterval = 3600; // Seconds.
+
+	double simulationTime = 0; // Seconds.
+	double simulationDistance = 0; // Meters.
+
+	int numAver = 5; // Number of GPS averaging points
+
+	//read the config file
+	while(configFileLoaded && std::getline(configFile,fileString)) {
+		if (!fileString.empty()) {
+			if(fileString.at(0) != '#') {
+				std::istringstream fileData(fileString);
+				fileData >> nameString >> dataString;
+				//handle the variables
+				if(nameString == "name")
+					std::cout<<"Using configuration file: "<<dataString<<std::endl;
+				else if(nameString == "inputFile")
+					std::ifstream inputFile(dataString);
+				else if(nameString == "outputName")
+					outputName == dataString;
+				else if(nameString == "boatSpeed")
+					boatSpeed = std::stod(dataString);
+				else if(nameString == "driftSpeed")
+					boatSpeed = std::stod(dataString);
+				else if (nameString == "windDir")
+					windDir = std::stod(dataString);
+				else if (nameString == "dt")
+					dt = std::stod(dataString);
+				else if (nameString == "heading")
+					heading = std::stod(dataString);
+				else if (nameString == "GpsAccuracy")
+					GpsAccuracy = std::stod(dataString);
+				else if (nameString == "writeInterval")
+					writeInterval = std::stod(dataString);
+				else if (nameString == "simulationTime")
+					simulationTime = std::stod(dataString);
+				else if (nameString == "simulationDistance")
+					simulationDistance = std::stod(dataString);
+				else if (nameString == "numAver")
+					numAver = std::stoi(dataString);
+			}
+		}
+	}
+
+
 	RouteIo routeIo (inputFile, outputName);
+
+	/*
+	std::ifstream inputFile("../../raspiMain/route/routeAtlantic.csv");
+	std::string outputFile = "../../raspiMain/route/routeAtlantic_simOut.csv";
+	RouteIo routeIo (inputFile, outputFile);
 
 	double boatSpeed = 0.8; // Speed of boat in m/s.
 	double driftSpeed = 0.15; // Speed of unwanted drift [m/s] into the direction of wind.
@@ -62,6 +139,7 @@ int main (int argc, char **argv)
 	double simulationDistance = 0; // Meters.
 
 	int numAver = 5; // Number of GPS averaging points.
+	*/
 
 	Coord current = routeIo.getCurrentTargetCoord(); // Use first listed point as the initial point.
 	Coord start = current;
