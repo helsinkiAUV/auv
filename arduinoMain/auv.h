@@ -27,4 +27,8 @@
   #define ARDUINO
 #endif
 
+#ifdef ARDUINO
+  #define ARDUINO_LEFT // Change this line, when compiling for each of the two Arduinos.
+#endif
+
 #endif

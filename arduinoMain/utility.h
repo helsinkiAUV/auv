@@ -24,6 +24,7 @@
 #define UTILITY_H_
 
 #include <math.h>
+#include "auv.h"
 #include "Coord.h"
 class Coord;
 
@@ -33,5 +34,21 @@ class Coord;
 void crossProduct (float v0[3], float v1[3], float n[3]);
 	
 void greatCircleVector (float heading, const Coord& current, float out[3]);
+
+#ifdef SIMULATOR
+  typedef char byte;
+#endif
+
+#if defined(ARDUINO)
+#define millisecondTimer() millis()
+#endif
+
+#define waitUntil(statement, maxWait, timeout) \
+        unsigned long startTime = millisecondTimer();\
+        while(true) {\
+        if (statement) {timeout = false; break;}\
+        if ((((unsigned long)millisecondTimer()) - startTime > maxWait)) \
+        {timeout = true; break;} \
+        }
 
 #endif /* UTILITY_H_ */

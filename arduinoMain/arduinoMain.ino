@@ -3,35 +3,35 @@
 #include "Coord.h"
 #include "Gps.h"
 #include "navigation.h"
+#include "i2cCommunication.h"
+#include "Wire.h"
+#include "utility.h"
 
 // Sets up the environment for the main loop.
 void setup() 
 {
   Serial.begin(19200);
-  Coord current(0.5, 24);
-  Coord target(1, 25.0);
-  Coord start(0, 25.0);
-
-  float r = current.distanceTo(target);
-
-  Serial.println(r/1000);
-
-//  int nh;
-//  float cte, dist;
-//  bool inForbZone;
-//
-//  unsigned long t1, t2;
-//  t1 = micros();
-//  newBearing(start, target, current, 1E4, 1E5, nh, dist, cte, inForbZone);
-//  t2 = micros();
-//  
-//  Serial.println(nh);
-//  Serial.println(dist/1000, 1);
-//  //Serial.println(val, 10);
-//  Serial.println((t2-t1)/1000.0, 3);
+  Wire.begin(I2C_ADDRESS);
+  // Let's us check incoming I2C messages when we deem fit.
+  // However, some function must be registered by onReceive(),
+  // because without it the receive buffer won't be filled.
+  Wire.onReceive(I2C_OnReceiveDoNothingImmediately);
 }
 
 void loop() 
 {
-
+  #ifdef ARDUINO_LEFT
+  
+  int errorCode;
+  int randomInt = I2C_requestRandomInt(11, errorCode);
+  Serial.println(randomInt);
+  
+  #elif defined(ARDUINO_RIGHT)
+  
+  I2C_respondToRequests();
+  
+  #endif
+  
+  delay(100);
 }
+
