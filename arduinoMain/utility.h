@@ -36,7 +36,7 @@ void crossProduct (float v0[3], float v1[3], float n[3]);
 void greatCircleVector (float heading, const Coord& current, float out[3]);
 
 #ifdef SIMULATOR
-  typedef char byte;
+  typedef unsigned char byte;
 #endif
 
 #if defined(ARDUINO)

@@ -24,10 +24,22 @@
 #define I2C_COMMUNICATION_H_
 
 #include "auv.h"
+
 #ifdef ARDUINO
 #include "Arduino.h"
 #include "../../libraries/Wire/Wire.h"
 #endif
+
+#ifdef RASPBERRY_PI
+#include<stdio.h>
+#include<unistd.h>
+#include<fcntl.h>
+#include<curses.h>
+#include <vector>
+#include "bsc-slave.h"
+#include "rPodI2C.h"
+#endif
+
 #ifndef ARDUINO
   #include <string.h>
 #endif
@@ -52,6 +64,33 @@ const int I2C_ERR_NOT_ENOUGH_BYTES_IN_INPUT = 2;
 const int I2C_ERR_WROTE_TOO_FEW_BYTES = 3;
 const int I2C_ERR_UNRECOGNIZED_REQUEST = 4;
 const int I2C_ERR_UNKNOWN_RUBBISH_IN_END_INT = 5; // Last two bytes were not I2C_END_OF_MESSAGE. Strange...
+const int I2C_ERR_COULD_NOT_OPEN_SLAVE_DEVICE = 6;
+const int I2C_ERR_COULD_NOT_OPEN_MASTER_DEVICE = 7;
+const int I2C_ERR_FAILED_SETTING_SLAVE_ADDRESS = 8;
+
+
+#ifdef RASPBERRY_PI
+typedef unsigned char byte;
+
+class Raspi_i2c
+{
+private:
+	std::vector<byte> _receiveBuffer; // Need contigous storage, so e.g. queue won't do!
+	std::vector<byte> _sendBuffer;
+	int _availableLength;
+	int _slaveDevice;
+	int _masterDevice;
+public:
+	Raspi_i2c() : _availableLength(0), _slaveDevice(0), _masterDevice(0) {};
+	int begin(byte address);
+	int beginTransmission(byte address);
+	int endTransmission();
+	int write(byte* data, int length);
+	int available();
+	byte read();
+};
+Raspi_i2c Wire;
+#endif
 
 template<class T>
 T I2C_receiveAnyType(int& errorCode);

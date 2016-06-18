@@ -6,9 +6,12 @@
 #include "i2cCommunication.h"
 #include "Wire.h"
 #include "utility.h"
+//
+
+#include <Wire.h>
 
 // Sets up the environment for the main loop.
-void setup() 
+void setup()
 {
   Serial.begin(19200);
   Wire.begin(I2C_ADDRESS);
@@ -18,20 +21,20 @@ void setup()
   Wire.onReceive(I2C_OnReceiveDoNothingImmediately);
 }
 
-void loop() 
+void loop()
 {
   #ifdef ARDUINO_LEFT
-  
+
   int errorCode;
   int randomInt = I2C_requestRandomInt(11, errorCode);
   Serial.println(randomInt);
-  
+
   #elif defined(ARDUINO_RIGHT)
-  
+
   I2C_respondToRequests();
-  
+
   #endif
-  
+
   delay(100);
 }
 
