@@ -19,6 +19,9 @@ void setup()
   // However, some function must be registered by onReceive(),
   // because without it the receive buffer won't be filled.
   Wire.onReceive(I2C_OnReceiveDoNothingImmediately);
+  #ifdef RASPBERRY_PI_SLAVE
+  Wire.onRequest(I2C_transferToRaspi);
+  #endif
 }
 
 void loop()

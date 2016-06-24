@@ -22,9 +22,9 @@
 
 #include "i2cCommunication.h"
 
-Raspi_i2c Wire;
-
 #ifdef RASPBERRY_PI
+
+Raspi_i2c Wire;
 
 void dumpVectorBytes(std::vector<byte> in)
 {
@@ -209,11 +209,11 @@ int I2C_requestRandomInt(byte device, int& errorCode)
 
 	bool timeoutFlag = false;
 #if defined(ARDUINO) || defined(RASPBERRY_PI)
-	sleep(1);
+	//sleep(1);
 	//waitUntil(Wire.available() >= sizeof(int), 2000, timeoutFlag)
 	I2C_respondToRequests();
 	//waitUntil(Wire.available() >= sizeof(int), 2000, timeoutFlag)
-	sleep(1);
+	//sleep(1);
 #endif
 
 	int randomVal;
@@ -348,5 +348,24 @@ void I2C_respondToRequests()
 void I2C_OnReceiveDoNothingImmediately(int numBytes)
 {
 	return;
+}
+
+void I2C_transferToRaspi()
+{
+  #ifdef RASPBERRY_PI_SLAVE
+  i2c_int_type sendVal;
+  
+  if (Wire.available() > 0)
+  {
+    sendVal = (i2c_int_type) Wire.read();
+  }
+  else
+  {
+    sendVal = I2C_END_OF_MESSAGE;
+  }
+
+  int errorCode;
+  I2C_sendAnyType(sendVal, errorCode);
+  #endif
 }
 

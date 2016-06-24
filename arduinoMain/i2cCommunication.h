@@ -62,7 +62,7 @@ typedef int i2c_int_type;
 const byte I2C_ADDRESS = 10;
 #elif defined(ARDUINO_RIGHT)
 const byte I2C_ADDRESS = 11;
-#elif defined(RASPBERRY_PI)
+#elif defined(RASPBERRY_PI_SLAVE)
 const byte I2C_ADDRESS = 12;
 #endif
 
@@ -119,5 +119,7 @@ float I2C_requestRandomFloat(byte device, int& errorCode);
 void I2C_respondToRequests();
 
 void I2C_OnReceiveDoNothingImmediately(int numBytes);
+
+void I2C_transferToRaspi();
 
 #endif

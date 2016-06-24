@@ -28,7 +28,7 @@
 #endif
 
 #ifdef ARDUINO
-  #define ARDUINO_RIGHT // Change this line, when compiling for each of the two Arduinos.
+  #define RASPBERRY_PI_SLAVE // Change this line, when compiling for each of the two Arduinos.
 #endif
 
 #endif
