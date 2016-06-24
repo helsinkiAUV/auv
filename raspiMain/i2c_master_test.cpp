@@ -1,6 +1,6 @@
 /*
- * Raspberry pi main function.
- * Created by Juho Iipponen on May 5, 2016.
+ * Raspberry pi I2C master test function.
+ * Created by Juho Iipponen on June 18, 2016.
  *
  * This file is part of the University of Helsinki AUV source code.
  *
@@ -19,22 +19,24 @@
  *
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
+ 
+ #include <iostream>
+ #include "i2cCommunication.h"
+ // TODO: Korjaa I2C_respondToRequests() raspille sopivaksi.
+ int main()
+ {
+#ifdef RASPBERRY_PI
+	int errorCode;
+	errorCode = Wire.begin(I2C_ADDRESS);
 
-#include "RouteIo.h"
-#include <iostream>
-#include <fstream>
-#include "timeString.h"
-
-#ifndef SIMULATOR
-int main ()
-{
-	std::ifstream inputFile("route/routeArabianranta.csv");
-	std::string outputFile("route/routeOut.csv");
-
-	RouteIo routeIo (inputFile, outputFile);
-
-	routeIo.write(getTimeString(), routeIo.getCurrentTargetCoord(), 5, 10);
-
-	return 0;
-}
+	std::cout << errorCode << std::endl;
+	
+	while(true)
+	{
+		int randomInt = I2C_requestRandomInt(12, errorCode);
+		std::cout << errorCode << " ";
+		std::cout << randomInt << std::endl;
+		sleep(1);
+	}
 #endif
+ }

@@ -36,8 +36,12 @@
 #include<fcntl.h>
 #include<curses.h>
 #include <vector>
+#include <string>
+#include <linux/i2c-dev.h>
+#include <sys/ioctl.h>
 #include "bsc-slave.h"
-#include "rPodI2C.h"
+#include <stdlib.h>
+//#include "rPodI2C.h"
 #endif
 
 #ifndef ARDUINO
@@ -45,18 +49,30 @@
 #endif
 #include "utility.h"
 
+// Typedefs
+#ifdef ARDUINO
+typedef long i2c_int_type;
+#elif defined(RASPBERRY_PI)
+typedef unsigned char byte;
+typedef int i2c_int_type;
+#endif
+
 // Addresses.
 #ifdef ARDUINO_LEFT
 const byte I2C_ADDRESS = 10;
 #elif defined(ARDUINO_RIGHT)
 const byte I2C_ADDRESS = 11;
+#elif defined(RASPBERRY_PI)
+const byte I2C_ADDRESS = 12;
 #endif
 
-const int I2C_END_OF_MESSAGE = -32767;
+const int I2C_MIN_MSG_SIZE = sizeof(byte) + 2*sizeof(i2c_int_type);
+
+const i2c_int_type I2C_END_OF_MESSAGE = -2147483648;
 
 // I2C requests
-const int I2C_REQUEST_RANDOM_INT = 1;
-const int I2C_REQUEST_RANDOM_FLOAT = 2;
+const i2c_int_type I2C_REQUEST_RANDOM_INT = 1;
+const i2c_int_type I2C_REQUEST_RANDOM_FLOAT = 2;
 
 // Error status messages
 const int I2C_ERR_TIMEOUT = 1;
@@ -70,8 +86,6 @@ const int I2C_ERR_FAILED_SETTING_SLAVE_ADDRESS = 8;
 
 
 #ifdef RASPBERRY_PI
-typedef unsigned char byte;
-
 class Raspi_i2c
 {
 private:
@@ -84,12 +98,12 @@ public:
 	Raspi_i2c() : _availableLength(0), _slaveDevice(0), _masterDevice(0) {};
 	int begin(byte address);
 	int beginTransmission(byte address);
-	int endTransmission();
+	int endTransmission(bool in = true);
 	int write(byte* data, int length);
 	int available();
 	byte read();
 };
-Raspi_i2c Wire;
+extern Raspi_i2c Wire;
 #endif
 
 template<class T>
@@ -101,8 +115,6 @@ void I2C_sendAnyType(T sendValue, int& errorCode);
 int I2C_requestRandomInt(byte device, int& errorCode);
 
 float I2C_requestRandomFloat(byte device, int& errorCode);
-
-void I2C_sendRequest(const int request, byte device, int& errorCode);
 
 void I2C_respondToRequests();
 

@@ -40,9 +40,8 @@ void greatCircleVector (float heading, const Coord& current, float out[3]);
 #endif
 
 #if defined(ARDUINO)
-#define millisecondTimer() millis()
-#endif
 
+#define millisecondTimer() millis()
 #define waitUntil(statement, maxWait, timeout) \
         unsigned long startTime = millisecondTimer();\
         while(true) {\
@@ -50,5 +49,19 @@ void greatCircleVector (float heading, const Coord& current, float out[3]);
         if ((((unsigned long)millisecondTimer()) - startTime > maxWait)) \
         {timeout = true; break;} \
         }
+		
+#elif defined(RASPBERRY_PI)
+#include "time.h"
+#define waitUntil(statement, maxWait, timeout) { \
+        clock_t startTime = clock();\
+        while(true) {\
+        if (statement) {timeout = false; break;}\
+        if (1000.0 * ((double)(clock() - startTime)) / CLOCKS_PER_SEC > maxWait) \
+        {timeout = true; break;} \
+        } \
+}
+#endif
+
+
 
 #endif /* UTILITY_H_ */

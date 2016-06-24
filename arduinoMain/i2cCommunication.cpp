@@ -22,7 +22,21 @@
 
 #include "i2cCommunication.h"
 
+Raspi_i2c Wire;
+
 #ifdef RASPBERRY_PI
+
+void dumpVectorBytes(std::vector<byte> in)
+{
+	std::cout << "Vector byte dump: ";
+	std::cout.width(4);
+	for (int i = 0; i < in.size(); i++)
+	{
+		std::cout << (int) in.at(i) << " ";
+	}
+	std::cout << " Size: " << in.size() << std::endl;
+}
+
 int Raspi_i2c::begin(byte address)
 {
 	_slaveDevice = open("/dev/i2c-slave", O_RDWR);
@@ -43,10 +57,11 @@ int Raspi_i2c::beginTransmission(byte address)
 	return 0;
 }
 
-int Raspi_i2c::endTransmission()
+int Raspi_i2c::endTransmission(bool in)
 {
 	int returnVal = 0;
-	int writeLen = write(_masterDevice, _sendBuffer.data(), _sendBuffer.size());
+	int writeLen = ::write(_masterDevice, _sendBuffer.data(), _sendBuffer.size());
+	dumpVectorBytes(_sendBuffer);
 	if (writeLen != _sendBuffer.size()) returnVal = 4;
 	_sendBuffer.erase(_sendBuffer.begin(), _sendBuffer.end());
 	close(_masterDevice);
@@ -66,7 +81,7 @@ int Raspi_i2c::available()
 {
 	const int TEMP_BUFF_SIZE = 32;
 	byte tempBuffer[TEMP_BUFF_SIZE];
-	int bytesAvailable = read(_slaveDevice, tempBuffer, TEMP_BUFF_SIZE);
+	int bytesAvailable = ::read(_slaveDevice, tempBuffer, TEMP_BUFF_SIZE);
 
 	if (bytesAvailable >= 0)
 	{
@@ -74,6 +89,7 @@ int Raspi_i2c::available()
 		{
 			_receiveBuffer.push_back(tempBuffer[i]);
 		}
+		if (bytesAvailable > 0) dumpVectorBytes(_receiveBuffer);
 		return _receiveBuffer.size();
 	}
 	else
@@ -193,7 +209,11 @@ int I2C_requestRandomInt(byte device, int& errorCode)
 
 	bool timeoutFlag = false;
 #if defined(ARDUINO) || defined(RASPBERRY_PI)
-	waitUntil(Wire.available() >= sizeof(int), 2000, timeoutFlag)
+	sleep(1);
+	//waitUntil(Wire.available() >= sizeof(int), 2000, timeoutFlag)
+	I2C_respondToRequests();
+	//waitUntil(Wire.available() >= sizeof(int), 2000, timeoutFlag)
+	sleep(1);
 #endif
 
 	int randomVal;
@@ -258,7 +278,9 @@ float I2C_requestRandomFloat(byte device, int& errorCode)
 void I2C_respondToRequests()
 {
 #if defined(ARDUINO) || defined(RASPBERRY_PI)
-	while (Wire.available()) // Loop over requests.
+	int avail = Wire.available();
+	avail = Wire.available();
+	while (Wire.available() >= I2C_MIN_MSG_SIZE) // Loop over requests.
 #endif
 	{
 		// TODO: Add more error recognition.
@@ -272,7 +294,7 @@ void I2C_respondToRequests()
 		// Second byte contains the request ID.
 		int request = I2C_receiveAnyType<int>(errorCode);
 
-#if defined(ARDUINO)
+#if defined(ARDUINO) || defined(RASPBERRY_PI)
 		Wire.beginTransmission(requestingAddress);
 #endif
 
@@ -283,8 +305,11 @@ void I2C_respondToRequests()
 		{
 			int randomInt = 0;
 #if defined(ARDUINO)
-			randomInt = (int) random(1, 100);
+			randomInt = (int) random(0, 99);
 			Serial.println("Random Int called");
+#elif defined(RASPBERRY_PI)
+			randomInt = rand() % 100;
+			std::cout << "Random Int called, sent: " << randomInt << std::endl;
 #endif
 			I2C_sendAnyType(randomInt, errorCode);
 		}
