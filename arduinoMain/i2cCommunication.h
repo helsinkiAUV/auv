@@ -62,7 +62,7 @@ typedef int i2c_int_type;
 const byte I2C_ADDRESS = 10;
 #elif defined(ARDUINO_RIGHT)
 const byte I2C_ADDRESS = 11;
-#elif defined(RASPBERRY_PI_SLAVE)
+#elif defined(RASPBERRY_PI_SLAVE) || defined(RASPBERRY_PI)
 const byte I2C_ADDRESS = 12;
 #endif
 
@@ -84,6 +84,7 @@ const int I2C_ERR_UNKNOWN_RUBBISH_IN_END_INT = 5; // Last two bytes were not I2C
 const int I2C_ERR_COULD_NOT_OPEN_SLAVE_DEVICE = 6;
 const int I2C_ERR_COULD_NOT_OPEN_MASTER_DEVICE = 7;
 const int I2C_ERR_FAILED_SETTING_SLAVE_ADDRESS = 8;
+const i2c_int_type I2C_ERR_READING_SLAVE = -1000;  
 
 
 #ifdef RASPBERRY_PI
@@ -95,8 +96,9 @@ private:
 	int _availableLength;
 	int _slaveDevice;
 	int _masterDevice;
+	i2c_int_type read_i2c_int_type_from_slave_arduino();
 public:
-	Raspi_i2c() : _availableLength(0), _slaveDevice(0), _masterDevice(0) {};
+	Raspi_i2c() : _availableLength(0), _masterDevice(0) {};
 	//int begin(byte address);
 	int beginTransmission(byte address);
 	int endTransmission(bool in = true);

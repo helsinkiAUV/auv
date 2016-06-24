@@ -77,24 +77,32 @@ int Raspi_i2c::write(byte* data, int length)
 	return length;
 }
 
+i2c_int_type Raspi_i2c::read_i2c_int_type_from_slave_arduino()
+{
+	const int NUM_BYTES_TO_READ = sizeof(i2c_int_type);
+	byte tempRxBuffer[NUM_BYTES_TO_READ];
+	
+	beginTransmission(I2C_ADDRESS);
+	int numReadBytes = ::read(_masterDevice, tempRxBuffer, NUM_BYTES_TO_READ);
+	close(_masterDevice);
+	
+	if (numReadBytes != NUM_BYTES_TO_READ)
+	{
+		return I2C_ERR_READING_SLAVE;
+	}
+	
+	i2c_int_type receivedInt = reinterpret_cast<i2c_int_type>(tempRxBuffer);
+	return receivedInt;
+}
+
 int Raspi_i2c::available()
 {
-	const int TEMP_BUFF_SIZE = 32;
-	byte tempBuffer[TEMP_BUFF_SIZE];
-	int bytesAvailable = ::read(_slaveDevice, tempBuffer, TEMP_BUFF_SIZE);
-
-	if (bytesAvailable >= 0)
+	while(true)
 	{
-		for (int i = 0; i < bytesAvailable; i++)
-		{
-			_receiveBuffer.push_back(tempBuffer[i]);
-		}
-		if (bytesAvailable > 0) dumpVectorBytes(_receiveBuffer);
-		return _receiveBuffer.size();
-	}
-	else
-	{
-		return bytesAvailable;
+		i2c_int_type receivedInt = read_i2c_int_type_from_slave_arduino();
+		if (receivedInt = I2C_NO_BYTES_IN_RX_BUFFER) return _receiveBuffer.size();
+		if (receivedInt = I2C_ERR_READING_SLAVE) return I2C_ERR_READING_SLAVE;
+		_receiveBuffer.push_back((byte) receivedInt);
 	}
 }
 

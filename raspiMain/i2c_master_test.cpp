@@ -27,15 +27,13 @@
  {
 #ifdef RASPBERRY_PI
 	int errorCode;
-	errorCode = Wire.begin(I2C_ADDRESS);
-
-	std::cout << errorCode << std::endl;
 	
 	while(true)
 	{
-		int randomInt = I2C_requestRandomInt(12, errorCode);
-		std::cout << errorCode << " ";
-		std::cout << randomInt << std::endl;
+		int numAvail = Wire.available();
+//		int randomInt = I2C_requestRandomInt(12, errorCode);
+//		std::cout << errorCode << " ";
+//		std::cout << randomInt << std::endl;
 		sleep(1);
 	}
 #endif
