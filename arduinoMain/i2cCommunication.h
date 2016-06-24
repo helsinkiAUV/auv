@@ -39,7 +39,7 @@
 #include <string>
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
-#include "bsc-slave.h"
+//#include "bsc-slave.h"
 #include <stdlib.h>
 //#include "rPodI2C.h"
 #endif
