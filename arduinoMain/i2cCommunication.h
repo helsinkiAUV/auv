@@ -96,7 +96,7 @@ private:
 	int _masterDevice;
 public:
 	Raspi_i2c() : _availableLength(0), _slaveDevice(0), _masterDevice(0) {};
-	int begin(byte address);
+	//int begin(byte address);
 	int beginTransmission(byte address);
 	int endTransmission(bool in = true);
 	int write(byte* data, int length);

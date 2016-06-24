@@ -37,15 +37,15 @@ void dumpVectorBytes(std::vector<byte> in)
 	std::cout << " Size: " << in.size() << std::endl;
 }
 
-int Raspi_i2c::begin(byte address)
-{
-	_slaveDevice = open("/dev/i2c-slave", O_RDWR);
-	if (_slaveDevice < 0)
-		return I2C_ERR_COULD_NOT_OPEN_SLAVE_DEVICE;
-	if (ioctl(_slaveDevice, I2C_SLAVE, address) < 0)
-		return I2C_ERR_FAILED_SETTING_SLAVE_ADDRESS;
-	return 0;
-}
+//int Raspi_i2c::begin(byte address)
+//{
+//	_slaveDevice = open("/dev/i2c-slave", O_RDWR);
+//	if (_slaveDevice < 0)
+//		return I2C_ERR_COULD_NOT_OPEN_SLAVE_DEVICE;
+//	if (ioctl(_slaveDevice, I2C_SLAVE, address) < 0)
+//		return I2C_ERR_FAILED_SETTING_SLAVE_ADDRESS;
+//	return 0;
+//}
 
 int Raspi_i2c::beginTransmission(byte address)
 {
@@ -61,7 +61,7 @@ int Raspi_i2c::endTransmission(bool in)
 {
 	int returnVal = 0;
 	int writeLen = ::write(_masterDevice, _sendBuffer.data(), _sendBuffer.size());
-	dumpVectorBytes(_sendBuffer);
+	//dumpVectorBytes(_sendBuffer);
 	if (writeLen != _sendBuffer.size()) returnVal = 4;
 	_sendBuffer.erase(_sendBuffer.begin(), _sendBuffer.end());
 	close(_masterDevice);
