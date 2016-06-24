@@ -69,6 +69,7 @@ const byte I2C_ADDRESS = 12;
 const int I2C_MIN_MSG_SIZE = sizeof(byte) + 2*sizeof(i2c_int_type);
 
 const i2c_int_type I2C_END_OF_MESSAGE = -2147483648;
+const i2c_int_type I2C_NO_BYTES_IN_RX_BUFFER = 2147483647;
 
 // I2C requests
 const i2c_int_type I2C_REQUEST_RANDOM_INT = 1;

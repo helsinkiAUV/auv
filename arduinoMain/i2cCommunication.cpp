@@ -361,7 +361,7 @@ void I2C_transferToRaspi()
   }
   else
   {
-    sendVal = I2C_END_OF_MESSAGE;
+    sendVal = I2C_NO_BYTES_IN_RX_BUFFER;
   }
 
   int errorCode;
