@@ -4,34 +4,31 @@
 #include "Gps.h"
 #include "navigation.h"
 
-// Sets up the environment for the main loop.
+
+// Setup the GPS class
+Gps gps(8,7);
+Adafruit_GPS Ada = gps.getAdaGPS();
+
+
 void setup() 
 {
-  Serial.begin(19200);
-  Coord current(0.5, 24);
-  Coord target(1, 25.0);
-  Coord start(0, 25.0);
+	Ada.begin(9600);
+	Serial.begin(115200);
 
-  float r = current.distanceTo(target);
+	Ada.sendCommand(PMTK_SET_NMEA_UPDATE_10HZ);
+  	Ada.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
 
-  Serial.println(r/1000);
-
-//  int nh;
-//  float cte, dist;
-//  bool inForbZone;
-//
-//  unsigned long t1, t2;
-//  t1 = micros();
-//  newBearing(start, target, current, 1E4, 1E5, nh, dist, cte, inForbZone);
-//  t2 = micros();
-//  
-//  Serial.println(nh);
-//  Serial.println(dist/1000, 1);
-//  //Serial.println(val, 10);
-//  Serial.println((t2-t1)/1000.0, 3);
+  	delay(1000); //is this useless
 }
+
+// some code for testing
+uint32_t timer = millis();
+int time0 = millis();
 
 void loop() 
 {
-
+	Coord here = gps.averageCoordinate(20);
+	int tiem = millis();
+	Serial.println(tiem-time0);
+	time0 = tiem;
 }

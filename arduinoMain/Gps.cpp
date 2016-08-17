@@ -23,10 +23,27 @@
 #include "auv.h"
 #include "Gps.h"
 
+#include <Adafruit_GPS.h>
+#include <SoftwareSerial.h>
+
+Gps::Gps(int TX, int RX) : _gpsSerial(TX, RX), _AdaGPS(&_gpsSerial){
+  //AdaGPS = Adafruit_GPS(&_gpsSerial);
+  _AdaGPS.sendCommand(PMTK_SET_NMEA_UPDATE_10HZ);
+  _AdaGPS.sendCommand(PMTK_API_SET_FIX_CTL_1HZ);
+}
+
 Coord Gps::read()
 {
-  // KORJAA!
-  return Coord(0, 0);
+  char wait4me [7] = "GPRMC";
+  uint8_t maximum = 1;
+  if(_AdaGPS.waitForSentence(wait4me,maximum)) {
+    _AdaGPS.parse(_AdaGPS.lastNMEA());
+  }
+
+  double lat = _AdaGPS.latitudeDegrees;
+  double lon = _AdaGPS.longitudeDegrees;
+
+  return Coord(lat,lon);
 }
 
 Coord Gps::averageCoordinate (int numPoints)

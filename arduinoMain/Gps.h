@@ -27,12 +27,18 @@
 #include "Coord.h"
 #include "constants.h"
 
+ #include <Adafruit_GPS.h>
+ #include <SoftwareSerial.h>
+
 class Gps
 {
+    private:
+    SoftwareSerial _gpsSerial;
+    Adafruit_GPS _AdaGPS;
+
   public:
-    explicit Gps ()
-    {
-    }
+    explicit Gps (int, int);
+
 
    /* Coord Gps::averageCoordinate () const
     * PURPOSE: Return weigted average coordinate, which represents the best guess of the current position.
@@ -48,6 +54,11 @@ class Gps
     int shutDown () const;
 
     int turnOn () const;
+
+    //-----
+    Adafruit_GPS getAdaGPS() {return _AdaGPS; };
+    SoftwareSerial getGpsSerial() {return _gpsSerial; };
+    
 };
 
 #endif /* GPS_H_ */
