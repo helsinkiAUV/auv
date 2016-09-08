@@ -27,7 +27,7 @@
 #include "Coord.h"
 #include "constants.h"
 
- #include <Adafruit_GPS.h>
+ #include "Adafruit_GPS.h"
  #include <SoftwareSerial.h>
 
 class Gps

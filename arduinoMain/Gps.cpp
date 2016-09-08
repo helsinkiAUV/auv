@@ -23,7 +23,7 @@
 #include "auv.h"
 #include "Gps.h"
 
-#include <Adafruit_GPS.h>
+#include "Adafruit_GPS.h"
 #include <SoftwareSerial.h>
 
 Gps::Gps(int TX, int RX) : _gpsSerial(TX, RX), _AdaGPS(&_gpsSerial){
