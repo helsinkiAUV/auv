@@ -1,6 +1,6 @@
 /*
- * Constants for the AUV software.
- * Created by Juho Iipponen on March 12, 2016.
+ * Orientation sensor class.
+ * Created by Juho Iipponen on March 11, 2016.
  *
  * This file is part of the University of Helsinki AUV source code.
  *
@@ -20,16 +20,33 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
 
-#ifndef CONSTANTS_H_
-#define CONSTANTS_H_
+#ifndef ORIENTATION_SENSOR_H_
+#define ORIENTATION_SENSOR_H_
 
-#include <math.h>
-#include "auv.h"
+#include <Adafruit_BNO055.h>
+#include <Adafruit_Sensor.h>
+#include <Adafruit_BNO055.h>
+#include "Arduino.h"
+//#include "EEPROM.h"
 
-const float RE = 6371E3; // Mean Earth radius.
-const float fullCirc = 2.0 * M_PI;
-const float halfCirc = M_PI;
+#define BNO055_SAMPLERATE_DELAY_MS (100) // Sample rate
+const int ERROR_ORIENTATION_SENSOR_INITIALIZATION = 1;
 
-const int gpsNumOfAveragingPoints = 10;
+float projectMagneticFieldToHorizontal (imu::Vector<3> reference_vec, imu::Vector<3> mag_meter_reading);
+void saveCalibrationToEeprom(int& errorFlag);
 
-#endif /* CONSTANTS_H_ */
+class OrientationSensor
+{
+  public:
+  explicit OrientationSensor(int& errorStatus);
+  int heading();
+  float temperature();
+  void displayCalStatus();
+  imu::Vector<3> gravityField();
+  imu::Vector<3> magneticField();
+
+  private:
+  Adafruit_BNO055 _bno;
+};
+
+#endif
