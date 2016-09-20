@@ -27,26 +27,35 @@
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include "Arduino.h"
-//#include "EEPROM.h"
+#include <EEPROM.h>
 
 #define BNO055_SAMPLERATE_DELAY_MS (100) // Sample rate
 const int ERROR_ORIENTATION_SENSOR_INITIALIZATION = 1;
+const int ERROR_ORIENTATION_SENSOR_CALIBRATION_TIMEOUT = 2;
+const unsigned int MAX_CALIBRATION_TIME_MS = 10000;
 
 float projectMagneticFieldToHorizontal (imu::Vector<3> reference_vec, imu::Vector<3> mag_meter_reading);
-void saveCalibrationToEeprom(int& errorFlag);
+
 
 class OrientationSensor
 {
   public:
-  explicit OrientationSensor(int& errorStatus);
+  explicit OrientationSensor();
+  void begin(int& errorStatus);
   int heading();
   float temperature();
   void displayCalStatus();
   imu::Vector<3> gravityField();
   imu::Vector<3> magneticField();
+  void saveCalibrationToEeprom(int& errorFlag);
+  void loadCalibrationData(int& errorFlag);
+  bool isFullyCalibrated();
+  void displaySensorStatus();
+  void recalibrate(int& errorFlag);
 
   private:
   Adafruit_BNO055 _bno;
+  adafruit_bno055_offsets_t _eepromReadCalibData;
 };
 
 #endif
