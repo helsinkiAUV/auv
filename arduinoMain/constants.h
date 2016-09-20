@@ -24,6 +24,7 @@
 #define CONSTANTS_H_
 
 #include <math.h>
+#include "auv.h"
 
 const float RE = 6371E3; // Mean Earth radius.
 const float fullCirc = 2.0 * M_PI;
