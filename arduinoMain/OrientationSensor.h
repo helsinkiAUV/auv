@@ -34,7 +34,7 @@ const int ERROR_ORIENTATION_SENSOR_INITIALIZATION = 1;
 const int ERROR_ORIENTATION_SENSOR_CALIBRATION_TIMEOUT = 2;
 const unsigned int MAX_CALIBRATION_TIME_MS = 10000;
 
-float projectMagneticFieldToHorizontal (imu::Vector<3> reference_vec, imu::Vector<3> mag_meter_reading);
+float computeHeadingFromHorizontalMagneticProjection (imu::Vector<3> gravityField, imu::Vector<3> magneticField);
 
 
 class OrientationSensor

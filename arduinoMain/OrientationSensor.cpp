@@ -24,14 +24,32 @@
 // TODO: Finish heading computation.
 
 #include "OrientationSensor.h"
-
-float projectMagneticFieldToHorizontal (imu::Vector<3> grav, imu::Vector<3> mag) 
+/* float computeHeadingFromHorizontalMagneticProjection (imu::Vector<3> gravityField, imu::Vector<3> magneticField) 
+ * PURPOSE: Project the magnetic field to horizontal and thus compute the heading.
+ * INPUT: 
+ *     imu::Vector<3> gravityField : from a call to gravityField()
+ *     imu::Vector<3> magneticField : from a call to magneticField()
+ * OUTPUT:
+ *     (float) heading in degrees [0,360].
+ */
+float computeHeadingFromHorizontalMagneticProjection (imu::Vector<3> gravityField, imu::Vector<3> magneticField) 
 {
-  imu::Vector<3> unitGravity = grav / grav.magnitude();
-  imu::Vector<3> horizontalMag = mag - unitGravity.scale((mag.dot(unitGravity)));
-  
+  imu::Vector<3> unitGravity = gravityField / gravityField.magnitude(); // Normalize gravity
+  imu::Vector<3> horizontalMagnetic = magneticField - unitGravity.scale((magneticField.dot(unitGravity)));
+  imu::Vector<3> relativeDirectionReference(-1,0,0); // Reference direction
+  imu::Vector<3> horizontalReference = relativeDirectionReference - unitGravity.scale((relativeDirectionReference.dot(unitGravity)));
+
+  float determinant = unitGravity.dot(horizontalReference.cross(horizontalMagnetic)); // Proportional to the sine of angle
+  float dot = horizontalReference.dot(horizontalMagnetic); // Cosine of the angle between vectors
+  float heading = atan2(determinant, dot)*180.0/M_PI + 180.0;
+  return heading;
 }
 
+/* OrientationSensor::saveCalibrationToEeprom(int& errorFlag)
+ * PURPOSE: Call once to save the current calibration state to EEPROM (non-volatile storage).
+ * INPUT:
+ *    int& errorFlag : Error status.
+ */
 void OrientationSensor::saveCalibrationToEeprom(int& errorFlag)
 {
   while (!_bno.isFullyCalibrated()) // WARNING: Possible infinite loop.
@@ -56,6 +74,10 @@ void OrientationSensor::saveCalibrationToEeprom(int& errorFlag)
   Serial.println("Data stored to EEPROM.");
 }
 
+/* OrientationSensor::loadCalibrationData(int& errorFlag)
+ * PURPOSE: Load calibration data from EEPROM (non-volatile storage).
+ * 
+ */
 void OrientationSensor::loadCalibrationData(int& errorFlag)
 {
   int eeAddress = 0;
@@ -95,6 +117,9 @@ void OrientationSensor::loadCalibrationData(int& errorFlag)
   Serial.println("All Orientation sensors calibrated!");
 }
 
+/* OrientationSensor::displayCalStatus()
+ * PURPOSE: Display calibration status in pretty print.
+ */
 void OrientationSensor::displayCalStatus()
 {
   /* Get the four calibration values (0..3) */
@@ -122,10 +147,16 @@ void OrientationSensor::displayCalStatus()
   Serial.println(mag, DEC);
 }
 
+/* OrientationSensor::OrientationSensor ()
+ * PURPOSE: Constructor. begin() (see below) must be called before the sensor can be used!
+ */
 OrientationSensor::OrientationSensor () : _bno(55), _eepromReadCalibData(adafruit_bno055_offsets_t())
 {
 }
 
+/* OrientationSensor::recalibrate(int& errorFlag)
+ * PURPOSE: Recalibrate the magnetic field sensor and set gyro/acc to EEPROM read defaults.
+ */
 void OrientationSensor::recalibrate(int& errorFlag)
 {
   _bno.setSensorOffsets(_eepromReadCalibData);
@@ -151,6 +182,9 @@ void OrientationSensor::recalibrate(int& errorFlag)
   Serial.println("Recalibration complete");
 }
 
+/* OrientationSensor::begin(int& errorStatus)
+ * PURPOSE: Begin communicating with the sensor and load the calibration data.
+ */
 void OrientationSensor::begin(int& errorStatus)
 {
   if (!_bno.begin()) 
@@ -161,31 +195,57 @@ void OrientationSensor::begin(int& errorStatus)
   loadCalibrationData(errorStatus);
 }
 
+/* OrientationSensor::isFullyCalibrated()
+ * PURPOSE: Check whether all calibration status are "3".
+ */
 bool OrientationSensor::isFullyCalibrated()
 {
   return _bno.isFullyCalibrated();
 }
 
+/* OrientationSensor::displaySensorStatus()
+ * PURPOSE: Display status.
+ */
 void OrientationSensor::displaySensorStatus()
 {
   return _bno.displaySystemStatus();
 }
 
+/* imu::Vector<3> OrientationSensor::gravityField()
+ * PURPOSE: Output the gravitational field of the Earth.
+ * OUTPUT:
+ *    imu::Vector<3> : the three-dimensional gravity field in the sensor reference-frame. [m/s^2].
+ */
 imu::Vector<3> OrientationSensor::gravityField()
 {
   return _bno.getVector(Adafruit_BNO055::VECTOR_GRAVITY);
 }
 
+/* imu::Vector<3> OrientationSensor::magneticField()
+ * PURPOSE: Output the magnetic field of the Earth.
+ * OUTPUT:
+ *    imu::Vector<3> : the three-dimensional magnetic field in the sensor reference-frame. [uT].
+ */
 imu::Vector<3> OrientationSensor::magneticField()
 {
   return _bno.getVector(Adafruit_BNO055::VECTOR_MAGNETOMETER);
 }
 
+/* int OrientationSensor::heading()
+ * PURPOSE: Compute the heading of the boat.
+ * OUTPUT:
+ *    (int) heading : Orientation-corrected heading [0,359].
+ */
 int OrientationSensor::heading()
 {
-  return (int) projectMagneticFieldToHorizontal(gravityField(), magneticField());
+  return (int) computeHeadingFromHorizontalMagneticProjection(gravityField(), magneticField());
 }
 
+/* float OrientationSensor::temperature()
+ * PURPOSE: Output temperature measured by the on-board chip.
+ * OUTPUT:
+ *    (float) temperature : Temperature in degrees Celsius.
+ */
 float OrientationSensor::temperature()
 {
   return _bno.getTemp();
