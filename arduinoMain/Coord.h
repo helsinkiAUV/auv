@@ -211,6 +211,30 @@ struct Coord
     return output;
   }
 #endif
+
+  //operator overloading
+  
+  inline bool operator==(const Coord& rhs){
+    if(this->latd == rhs.latd && this->lond == rhs.lond) {
+      return true;
+    }
+    else
+      return false;
+  }
+inline bool operator!=(const Coord& rhs){
+    if(this->latd != rhs.latd || this->lond !=rhs.lond) {
+      return true;
+    }
+    else return false;
+  }
+
+bool equals(const Coord ref1, const Coord ref2, const double delta) {
+  if(ref1.latd == ref2.latd && ref1.lond == ref2.lond) {
+    return true;
+  }
+   else return false;
+}
+
 };
 
 /* float angleBetweenBearings(const float b1, const float b2)
