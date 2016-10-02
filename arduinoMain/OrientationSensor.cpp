@@ -250,5 +250,3 @@ float OrientationSensor::temperature()
 {
   return _bno.getTemp();
 }
-
-

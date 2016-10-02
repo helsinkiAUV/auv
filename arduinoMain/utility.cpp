@@ -39,3 +39,9 @@ void greatCircleVector (float heading, const Coord& current, float out[3])
   out[1] = -current.cosLon*cos(heading)-current.sinLat*current.sinLon*sin(heading); 
   out[2] = current.cosLat*sin(heading);
 }
+
+float clamp(float minVal, float x, float maxVal)
+{
+  return fmax(minVal, fmin(x, maxVal));
+}
+

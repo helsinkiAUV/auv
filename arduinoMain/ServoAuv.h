@@ -1,5 +1,5 @@
 /*
- * Utility functions for the AUV software.
+ * AUV Servo class.
  * Created by Juho Iipponen on March 11, 2016.
  *
  * This file is part of the University of Helsinki AUV source code.
@@ -20,20 +20,30 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
 
-#ifndef UTILITY_H_
-#define UTILITY_H_
+#ifndef SERVO_AUV_H_
+#define SERVO_AUV_H_
 
-#include <math.h>
-#include "Coord.h"
-class Coord;
+#include "auv.h"
+#include <Servo.h>
 
-/* void crossProduct (float v0[3], float v1[3], float n[3])
- * PURPOSE: Computes cross product of v0 x v1 and stores the result into n.
- */
-void crossProduct (float v0[3], float v1[3], float n[3]);
-	
-void greatCircleVector (float heading, const Coord& current, float out[3]);
+const int ANGLE_RANGE = 50;
+const int NUM_STEPS = 6;
+const int MAX_VAL = 2350;
+const int MIN_VAL = 697;
 
-float clamp(float minVal, float x, float maxVal);
+class ServoAuv
+{
+public:
+  explicit ServoAuv(int port, int minVal = MIN_VAL, int maxVal = MAX_VAL, 
+                    int angleRange = ANGLE_RANGE, int numSteps = NUM_STEPS);
+  void turnTo(int step);
+  int getAngleRange() { return _angleRange; }
+  int getNumSteps() { return _numSteps; }
+  ~ServoAuv();
+private:
+  Servo _arduinoServo;
+  int _angleRange;
+  int _numSteps;
+};
 
-#endif /* UTILITY_H_ */
+#endif
