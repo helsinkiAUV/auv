@@ -78,7 +78,7 @@ void OrientationSensor::saveCalibrationToEeprom(int& errorFlag)
  * PURPOSE: Load calibration data from EEPROM (non-volatile storage).
  * 
  */
-void OrientationSensor::loadCalibrationData(int& errorFlag)
+void OrientationSensor::loadCalibrationData(int& errorFlag, bool bypassCalibration)
 {
   int eeAddress = 0;
   long bnoID;
@@ -103,18 +103,21 @@ void OrientationSensor::loadCalibrationData(int& errorFlag)
   Serial.println("\n\nRestoring Calibration data to the BNO055...");
   _bno.setSensorOffsets(calibrationData);
 
-  sensors_event_t event;
-  _bno.getEvent(&event);
-  if (!_bno.isFullyCalibrated()){
-      Serial.println("Move sensor slightly to calibrate magnetometers");
-      while (!_bno.isFullyCalibrated())
-      {
-          _bno.getEvent(&event);
-          delay(BNO055_SAMPLERATE_DELAY_MS);
-      }
+  if (!bypassCalibration)
+  {
+    sensors_event_t event;
+    _bno.getEvent(&event);
+    if (!_bno.isFullyCalibrated()){
+        Serial.println("Move sensor slightly to calibrate magnetometers");
+        while (!_bno.isFullyCalibrated())
+        {
+            _bno.getEvent(&event);
+            delay(BNO055_SAMPLERATE_DELAY_MS);
+        }
+    }
+  
+    Serial.println("All Orientation sensors calibrated!");
   }
-
-  Serial.println("All Orientation sensors calibrated!");
 }
 
 /* OrientationSensor::displayCalStatus()
@@ -185,14 +188,14 @@ void OrientationSensor::recalibrate(int& errorFlag)
 /* OrientationSensor::begin(int& errorStatus)
  * PURPOSE: Begin communicating with the sensor and load the calibration data.
  */
-void OrientationSensor::begin(int& errorStatus)
+void OrientationSensor::begin(int& errorStatus, bool bypassCalibration)
 {
   if (!_bno.begin()) 
   {
     errorStatus = ERROR_ORIENTATION_SENSOR_INITIALIZATION;
     return;
   }
-  loadCalibrationData(errorStatus);
+  loadCalibrationData(errorStatus, bypassCalibration);
 }
 
 /* OrientationSensor::isFullyCalibrated()

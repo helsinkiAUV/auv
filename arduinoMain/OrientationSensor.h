@@ -41,14 +41,14 @@ class OrientationSensor
 {
   public:
   explicit OrientationSensor();
-  void begin(int& errorStatus);
+  void begin(int& errorStatus, bool bypassCalibration = false);
   int heading();
   float temperature();
   void displayCalStatus();
   imu::Vector<3> gravityField();
   imu::Vector<3> magneticField();
   void saveCalibrationToEeprom(int& errorFlag);
-  void loadCalibrationData(int& errorFlag);
+  void loadCalibrationData(int& errorFlag, bool bypassCalibration);
   bool isFullyCalibrated();
   void displaySensorStatus();
   void recalibrate(int& errorFlag);

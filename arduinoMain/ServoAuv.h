@@ -24,7 +24,8 @@
 #define SERVO_AUV_H_
 
 #include "auv.h"
-#include <Servo.h>
+#include "Arduino.h"
+#include <ServoTimer2.h>
 
 const int ANGLE_RANGE = 50;
 const int NUM_STEPS = 6;
@@ -37,13 +38,18 @@ public:
   explicit ServoAuv(int port, int minVal = MIN_VAL, int maxVal = MAX_VAL, 
                     int angleRange = ANGLE_RANGE, int numSteps = NUM_STEPS);
   void turnTo(int step);
+  void begin();
+  void detach();
   int getAngleRange() { return _angleRange; }
   int getNumSteps() { return _numSteps; }
   ~ServoAuv();
 private:
-  Servo _arduinoServo;
+  ServoTimer2 _arduinoServo;
   int _angleRange;
   int _numSteps;
+  int _minVal;
+  int _maxVal;
+  int _port;
 };
 
 #endif

@@ -22,17 +22,29 @@
 
  #include "ServoAuv.h"
 
-ServoAuv::ServoAuv(int port, int minVal, int maxVal, int angleRange, int numSteps) : _angleRange(angleRange), _numSteps(numSteps)
+ServoAuv::ServoAuv(int port, int minVal, int maxVal, int angleRange, int numSteps) :
+    _angleRange(angleRange), _numSteps(numSteps), _minVal(minVal), _maxVal(maxVal), _port(port)
 {
-   _arduinoServo.attach(port, minVal, maxVal);
 }
 
 void ServoAuv::turnTo(int step)
 {
-  _arduinoServo.write(90 + (float)_angleRange / _numSteps * step);
+  float angle0to180 = 90 + (float)_angleRange / _numSteps * step;
+  int pulseLength = map(angle0to180, 0, 180, _minVal, _maxVal);
+  _arduinoServo.write(pulseLength);
 }
 
 ServoAuv::~ServoAuv()
+{
+  _arduinoServo.detach();
+}
+
+void ServoAuv::begin()
+{
+   _arduinoServo.attach(_port);
+}
+
+void ServoAuv::detach()
 {
   _arduinoServo.detach();
 }
