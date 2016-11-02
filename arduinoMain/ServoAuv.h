@@ -25,7 +25,7 @@
 
 #include "auv.h"
 #include "Arduino.h"
-#include <ServoTimer2.h>
+#include <Adafruit_PWMServoDriver.h>
 
 const int ANGLE_RANGE = 50;
 const int NUM_STEPS = 6;
@@ -35,7 +35,7 @@ const int MIN_VAL = 697;
 class ServoAuv
 {
 public:
-  explicit ServoAuv(int port, int minVal = MIN_VAL, int maxVal = MAX_VAL, 
+  explicit ServoAuv(int channel, int minVal = MIN_VAL, int maxVal = MAX_VAL, 
                     int angleRange = ANGLE_RANGE, int numSteps = NUM_STEPS);
   void turnTo(int step);
   void begin();
@@ -44,12 +44,12 @@ public:
   int getNumSteps() { return _numSteps; }
   ~ServoAuv();
 private:
-  ServoTimer2 _arduinoServo;
+  Adafruit_PWMServoDriver _arduinoServo;
   int _angleRange;
   int _numSteps;
   int _minVal;
   int _maxVal;
-  int _port;
+  int _channel;
 };
 
 #endif
