@@ -24,26 +24,32 @@
 #define SERVO_AUV_H_
 
 #include "auv.h"
-#include <Servo.h>
+#include "Arduino.h"
+#include <Adafruit_PWMServoDriver.h>
 
 const int ANGLE_RANGE = 50;
 const int NUM_STEPS = 6;
-const int MAX_VAL = 2350;
-const int MIN_VAL = 697;
+const int MAX_VAL = 590;
+const int MIN_VAL = 190;
 
 class ServoAuv
 {
 public:
-  explicit ServoAuv(int port, int minVal = MIN_VAL, int maxVal = MAX_VAL, 
+  explicit ServoAuv(int channel, int minVal = MIN_VAL, int maxVal = MAX_VAL, 
                     int angleRange = ANGLE_RANGE, int numSteps = NUM_STEPS);
   void turnTo(int step);
+  void begin();
+  void detach();
   int getAngleRange() { return _angleRange; }
   int getNumSteps() { return _numSteps; }
   ~ServoAuv();
 private:
-  Servo _arduinoServo;
+  Adafruit_PWMServoDriver _arduinoServo;
   int _angleRange;
   int _numSteps;
+  int _minVal;
+  int _maxVal;
+  int _channel;
 };
 
 #endif

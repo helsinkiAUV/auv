@@ -37,7 +37,11 @@
 #include "constants.h"
 #include "Coord.h"
 #include "Gps.h"
+#include "ServoAuv.h"
+#include "OrientationSensor.h"
 #include <math.h> // fmod, M_PI
+
+const int sectorWidthInRad = 80*M_PI/180; // Figure out a better name.
 
 // MAIN NAVIGATION FUNCTION:
 
@@ -60,4 +64,6 @@
  */
 void newBearing (const Coord& start, const Coord& target, const Coord& current, const float maxPassDist,
                  const float maxCrossTrackErr, int& nextBearing, float& distToTarget, float& crossTrackErr, bool& inForbiddenZone);
+
+void holdCourse(const OrientationSensor& orient, ServoAuv& rudderServo, int course, unsigned long holdTime, unsigned long averTime, unsigned long sampleDt);
 #endif // NAVIGATION_H_

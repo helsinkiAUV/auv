@@ -22,18 +22,33 @@
 
  #include "ServoAuv.h"
 
-ServoAuv::ServoAuv(int port, int minVal, int maxVal, int angleRange, int numSteps) : _angleRange(angleRange), _numSteps(numSteps)
+ServoAuv::ServoAuv(int channel, int minVal, int maxVal, int angleRange, int numSteps) :
+    _angleRange(angleRange), _numSteps(numSteps), _minVal(minVal), _maxVal(maxVal), _channel(channel), _arduinoServo(Adafruit_PWMServoDriver(0x40))
 {
-   _arduinoServo.attach(port, minVal, maxVal);
 }
 
 void ServoAuv::turnTo(int step)
 {
-  _arduinoServo.write(90 + (float)_angleRange / _numSteps * step);
+  float angle0to180 = 90 + (float)_angleRange / _numSteps * step;
+  int pulseLength = map(angle0to180, 0, 180, _minVal, _maxVal);
+  _arduinoServo.setPWM(_channel, 0, pulseLength);
 }
 
 ServoAuv::~ServoAuv()
 {
-  _arduinoServo.detach();
+  //_arduinoServo.detach();
+}
+
+void ServoAuv::begin()
+{
+  _arduinoServo.begin();
+  _arduinoServo.setPWMFreq(60);
+   //_arduinoServo.attach(_port);
+   yield();
+}
+
+void ServoAuv::detach()
+{
+  //_arduinoServo.detach();
 }
 
