@@ -25,7 +25,6 @@
 ServoAuv::ServoAuv(int channel, int minVal, int maxVal, int angleRange, int numSteps) :
     _angleRange(angleRange), _numSteps(numSteps), _minVal(minVal), _maxVal(maxVal), _channel(channel), _arduinoServo(Adafruit_PWMServoDriver(0x40))
 {
-  _arduinoServo.setPWMFreq(1000);
 }
 
 void ServoAuv::turnTo(int step)
@@ -42,7 +41,10 @@ ServoAuv::~ServoAuv()
 
 void ServoAuv::begin()
 {
+  _arduinoServo.begin();
+  _arduinoServo.setPWMFreq(60);
    //_arduinoServo.attach(_port);
+   yield();
 }
 
 void ServoAuv::detach()

@@ -29,8 +29,8 @@
 
 const int ANGLE_RANGE = 50;
 const int NUM_STEPS = 6;
-const int MAX_VAL = 2350;
-const int MIN_VAL = 697;
+const int MAX_VAL = 590;
+const int MIN_VAL = 190;
 
 class ServoAuv
 {
