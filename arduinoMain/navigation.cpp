@@ -96,10 +96,10 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
 
 }
 
-void holdCourse(const OrientationSensor& orient, ServoAuv& rudderServo, int course, unsigned int holdTime, unsigned int averTime, unsigned int sampleDt)
+void holdCourse(const OrientationSensor& orient, ServoAuv& rudderServo, int course, unsigned long holdTime, unsigned long averTime, unsigned long sampleDt)
 {
 #ifdef ARDUINO
-  unsigned int tBegin = millis();
+  unsigned long tBegin = millis();
   averTime = fmin(averTime, holdTime);
   sampleDt = fmin(sampleDt, averTime);
   float courseInRad = course * M_PI / 180;
@@ -107,9 +107,9 @@ void holdCourse(const OrientationSensor& orient, ServoAuv& rudderServo, int cour
   while (millis() - tBegin <= holdTime)
   {
     int numSamples = 0;
-    unsigned int averBegin = millis();
+    unsigned long averBegin = millis();
     float courseDeviation = 0;
-    unsigned int tLastSample = millis() - sampleDt;
+    unsigned long tLastSample = millis() - sampleDt;
 
     while (millis() - averBegin <= averTime) // Tightest loop in the whole AUV
     {
@@ -131,7 +131,8 @@ void holdCourse(const OrientationSensor& orient, ServoAuv& rudderServo, int cour
 //    Serial.print(orient.heading()); Serial.print(" ");
 //    Serial.print(course); Serial.print(" ");
 //    Serial.print(courseDeviation*180/M_PI); Serial.print(" ");
-//    Serial.println(rudderState);
+    Serial.print("rudderState: ");
+    Serial.println(rudderState);
   }
 #endif
 }
