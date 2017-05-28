@@ -27,6 +27,9 @@
 #include "auv.h"
 
 const float RE = 6371E3; // Mean Earth radius.
+#ifndef M_PI
+  M_PI = 3.14159265358979323846_d
+#endif
 const float fullCirc = 2.0 * M_PI;
 const float halfCirc = M_PI;
 

@@ -33,7 +33,7 @@
 class Gps
 {
     private:
-    SoftwareSerial _gpsSerial;
+    //SoftwareSerial _gpsSerial;
     Adafruit_GPS _AdaGPS;
 
   public:
@@ -57,7 +57,7 @@ class Gps
 
     //-----
     Adafruit_GPS getAdaGPS() {return _AdaGPS; };
-    SoftwareSerial getGpsSerial() {return _gpsSerial; };
+    //SoftwareSerial getGpsSerial() {return _gpsSerial; };
     
 };
 

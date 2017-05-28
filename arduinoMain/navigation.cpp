@@ -96,7 +96,7 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
 
 }
 
-void holdCourse(const OrientationSensor& orient, ServoAuv& rudderServo, int course, unsigned long holdTime, unsigned long averTime, unsigned long sampleDt)
+void holdCourse(OrientationSensor& orient, ServoAuv& rudderServo, int course, unsigned long holdTime, unsigned long averTime, unsigned long sampleDt)
 {
 #ifdef ARDUINO
   unsigned long tBegin = millis();

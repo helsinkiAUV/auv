@@ -12,8 +12,8 @@ OrientationSensor orient;
 ServoAuv servo(1);
 Gps gps(8,7);
 Adafruit_GPS Ada = gps.getAdaGPS();
-const int numPoints = 3;
-Coord points[numPoints] = {Coord(60.202371, 24.978190), Coord(60.20461, 24.979489), Coord(60.20713, 24.982666)};
+//const int numPoints = 3;
+//Coord points[numPoints] = {Coord(60.202371, 24.978190), Coord(60.20461, 24.979489), Coord(60.20713, 24.982666)};
 
 void setup() 
 {
@@ -21,7 +21,8 @@ void setup()
   Serial.println("Begin setup");
   orient.begin(errorFlag, true);
   servo.begin();
-  Ada.begin(9200);
+  //Ada.begin(9200);
+  orient.recalibrate(errorFlag);
   while(!orient.isFullyCalibrated())
   {
     Serial.println("Calib:");
@@ -29,43 +30,6 @@ void setup()
     Serial.println(errorFlag);
     delay(1000);
   }
-
-    Coord start = gps.averageCoordinate(10);
-    //Coord start = Coord(60,25);
-    for(int i = 0; i < numPoints; i++)
-    {
-      Coord current = gps.averageCoordinate(10);
-      //Coord current = Coord(59.5, 25 + random(-2, 3));
-      Coord goal = points[i];
-      Serial.println("For");
-      while (current.distanceTo(goal) > 25)
-      {
-        Serial.println("While");
-        int nextBearing;
-        float r, cte;
-        bool inForbiddenZone;
-        newBearing (start, goal, current, 25,
-                   50, nextBearing, r, cte, inForbiddenZone);
-        Serial.print(current.latd); Serial.print(", ");
-        Serial.println(current.lond);
-        Serial.print("Course: "); Serial.println(nextBearing);
-        Serial.print("Heading: "); Serial.println(orient.heading());
-        Serial.print("r: "); Serial.println(r);
-        Serial.print("cte: "); Serial.println(cte);
-  
-        holdCourse(orient, servo, nextBearing, 10000, 2000, 100);
-        
-        current = gps.averageCoordinate(10);   
-        long randVal = random(-2,3); 
-        //current = Coord(59.5, 25 + randVal);
-        Serial.println(orient.temperature());
-        Serial.println();
-      }
-      Serial.println("WP REACHED!");
-      start = points[i];
-    }
-    Serial.println("FINAL WP REACHED!");
-
   
 }
 
