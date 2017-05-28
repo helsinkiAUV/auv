@@ -2,7 +2,7 @@
 #include "Arduino.h" // Include this to every header file, where you want to use the Arduino functions.
 #include "constants.h"
 #include "Coord.h"
-#include "Gps.h"
+//#include "Gps.h"
 #include "navigation.h"
 #include "ServoAuv.h"
 #include "OrientationSensor.h"
@@ -10,8 +10,8 @@
 int errorFlag = 0;
 OrientationSensor orient;
 ServoAuv servo(1);
-Gps gps(8,7);
-Adafruit_GPS Ada = gps.getAdaGPS();
+//Gps gps(8,7);
+//Adafruit_GPS Ada = gps.getAdaGPS();
 //const int numPoints = 3;
 //Coord points[numPoints] = {Coord(60.202371, 24.978190), Coord(60.20461, 24.979489), Coord(60.20713, 24.982666)};
 
