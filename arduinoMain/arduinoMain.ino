@@ -21,14 +21,23 @@ void setup()
   Serial.println("Begin setup");
   orient.begin(errorFlag, true);
   servo.begin();
-  //Ada.begin(9200);
-  orient.recalibrate(errorFlag);
-  while(!orient.isFullyCalibrated())
+  Ada.begin(9200);
+  //orient.recalibrate(errorFlag);
+  //while(!orient.isFullyCalibrated())
+  //{
+  //  Serial.println("Calib:");
+  //  orient.displayCalStatus();
+  //  Serial.println(errorFlag);
+  //  delay(1000);
+  //}
+  
+  while(true)
   {
-    Serial.println("Calib:");
-    orient.displayCalStatus();
-    Serial.println(errorFlag);
-    delay(1000);
+    Coord current = gps.averageCoordinate(10);
+    int heading = orient.heading();
+    Serial.print(current.latd);Serial.print(",");Serial.println(current.lond);
+    Serial.println(heading);
+    Serial.println();
   }
   
 }
