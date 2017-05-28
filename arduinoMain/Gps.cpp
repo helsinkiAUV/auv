@@ -26,7 +26,7 @@
 #include "Adafruit_GPS.h"
 #include <SoftwareSerial.h>
 
-Gps::Gps(int TX, int RX) : _AdaGPS(&Serial1){
+Gps::Gps(int TX, int RX) : _gpsSerial(TX, RX), _AdaGPS(&_gpsSerial){
   //AdaGPS = Adafruit_GPS(&_gpsSerial);
   _AdaGPS.sendCommand(PMTK_SET_NMEA_UPDATE_10HZ);
   _AdaGPS.sendCommand(PMTK_API_SET_FIX_CTL_1HZ);
