@@ -19,9 +19,13 @@ void setup()
 {
   Serial.begin(19200);
   Serial.println("Begin setup");
-  orient.begin(errorFlag, true);
-  servo.begin();
+  //orient.begin(errorFlag, true);
+  //servo.begin();
   Ada.begin(9200);
+  // USE sendCommand() here. They don't seem to really work in the constructor of gps class
+  // Also using it here once and then commenting it out might put the wanted code indefinitely
+  Ada.sendCommand(PMTK_SET_NMEA_UPDATE_10HZ);
+  //Ada.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
   //orient.recalibrate(errorFlag);
   //while(!orient.isFullyCalibrated())
   //{
@@ -34,9 +38,10 @@ void setup()
   while(true)
   {
     Coord current = gps.averageCoordinate(10);
-    int heading = orient.heading();
-    Serial.print(current.latd);Serial.print(",");Serial.println(current.lond);
-    Serial.println(heading);
+    //int heading = orient.heading();
+    Serial.println("average coordinate:");
+    Serial.print(current.latd,6);Serial.print(",");Serial.println(current.lond,6);
+    //Serial.println(heading);
     Serial.println();
   }
   
