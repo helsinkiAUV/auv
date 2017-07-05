@@ -52,13 +52,16 @@ Coord Gps::read()
   //Serial.println(_AdaGPS.lastNMEA());
   //Serial.print("lat,lon: ");
   //Serial.print(lat);Serial.print(" , ");Serial.println(lon);
-  return Coord(lat,lon);
+  Coord result = Coord(lat,lon);
+  return result;
 }
 
 Coord Gps::averageCoordinate (int numPoints)
 {
   Coord origin = read();
-  Serial.println("Starting to average coord");
+  Coord anotherPoint = read();
+  origin = read();
+  //Serial.println("Starting to average coord");
   //Serial.print(origin.latd);Serial.print(",");Serial.println(origin.lond);
   if( numPoints == 1)
   {
@@ -70,13 +73,15 @@ Coord Gps::averageCoordinate (int numPoints)
   float meanY = 0;
 
   // Let's declare anotherPoint here and use read() once to test if it will get rid of coordinates with zero first component
-  Coord anotherPoint = read();
+  //Coord anotherPoint = read();
+  anotherPoint = read();
+  
   
   for(int i = 2; i <= numPoints; i++)
   { 
     //Coord anotherPoint = read();
     anotherPoint = read();
-    Serial.print(anotherPoint.latd,6);Serial.print(",");Serial.println(anotherPoint.lond,6);
+    //Serial.print(anotherPoint.latd,6);Serial.print(",");Serial.println(anotherPoint.lond,6);
     float dist = origin.distanceTo(anotherPoint);                            
 	float angle = origin.bearingTo(anotherPoint);	
 	

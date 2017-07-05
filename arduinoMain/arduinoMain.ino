@@ -25,7 +25,7 @@ void setup()
   // USE sendCommand() here. They don't seem to really work in the constructor of gps class
   // Also using it here once and then commenting it out might put the wanted code indefinitely
   Ada.sendCommand(PMTK_SET_NMEA_UPDATE_10HZ);
-  //Ada.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
+  Ada.sendCommand(PMTK_SET_NMEA_OUTPUT_RMCONLY);
   //orient.recalibrate(errorFlag);
   //while(!orient.isFullyCalibrated())
   //{
@@ -34,15 +34,55 @@ void setup()
   //  Serial.println(errorFlag);
   //  delay(1000);
   //}
-  
+
+
+  double A = 5.0; //metriä //säde jonka ulkopuolella informaatio ylittää kohinan
+  float heading = 0;
+  double distance = 0.0;
+  Coord goalPoint = Coord(60.202997,24.961732);
+  float goalDistance = 0.0;
+  float goalHeading = 0.0;
+  // HEADING TESTI 5.7.2017
+  delay(5000);
+    Coord origin = gps.averageCoordinate(10); //alkupiste
+    Coord current = gps.averageCoordinate(10);
+    
   while(true)
   {
-    Coord current = gps.averageCoordinate(10);
+    Serial.println("Calculating distance to goal");
+    goalDistance = current.distanceTo(goalPoint);
+    goalHeading = current.bearingTo(goalPoint)*180/M_PI;
+    Serial.print("Distance to goal (m): ");Serial.println(goalDistance);
+    Serial.print("Heading to goal: ");Serial.println(goalHeading);
+    while(true) {
+      //lasketaan etäisyys
+      current = gps.averageCoordinate(10);
+      distance = origin.distanceTo(current); // etäisyys nykypisteeseen
+      Serial.print("d(origin,current) = ");Serial.println(distance);
+      //Serial.print(origin.latd,6);Serial.print(",");Serial.println(origin.lond,6);
+      //Serial.print(current.latd,6);Serial.print(",");Serial.println(current.lond,6);
+      Serial.println("-----");
+      Serial.println("Calculating distance to goal");
+      goalDistance = current.distanceTo(goalPoint);
+      goalHeading = current.bearingTo(goalPoint)*180/M_PI;
+      Serial.print("Distance to goal (m): ");Serial.println(goalDistance);
+      Serial.print("Heading to goal: ");Serial.println(goalHeading);
+      Serial.println("-----");
+      if(distance >= A) {
+        Serial.println("Lasketaan heading, koska distance > A = 10.0 m");
+        heading = origin.bearingTo(current)*180/M_PI;
+        Serial.print("Heading: ");Serial.println(heading);
+        origin = current;
+        break;
+      }
+    }
+    
+    //Coord current = gps.averageCoordinate(10); 
     //int heading = orient.heading();
-    Serial.println("average coordinate:");
-    Serial.print(current.latd,6);Serial.print(",");Serial.println(current.lond,6);
+    //Serial.println("average coordinate:");
+    //Serial.print(current.latd,6);Serial.print(",");Serial.println(current.lond,6);
     //Serial.println(heading);
-    Serial.println();
+    //Serial.println();
   }
   
 }
