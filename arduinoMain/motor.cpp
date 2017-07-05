@@ -1,5 +1,5 @@
 #include "motor.hpp"
-#include "ARDUINO.H"
+#include "Arduino.h"
 
 Motor::Motor(int p_digitalPort, int p_analogPort) {
   digitalPort = p_digitalPort;

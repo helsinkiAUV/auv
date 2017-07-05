@@ -96,43 +96,40 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
 
 }
 
-void holdCourse(OrientationSensor& orient, ServoAuv& rudderServo, int course, unsigned long holdTime, unsigned long averTime, unsigned long sampleDt)
+void holdCourse(Gps& gpsOnly, ServoAuv& rudderServo, int course, double holdDistance, 
+  float bearingComputeDistance, int& bearing)
 {
 #ifdef ARDUINO
-  unsigned long tBegin = millis();
-  averTime = fmin(averTime, holdTime);
-  sampleDt = fmin(sampleDt, averTime);
   float courseInRad = course * M_PI / 180;
+  float bearingInRad = bearing * M_PI / 180;
+  int numBearingComputations = 0;
+  Coord origin = gpsOnly.averageCoordinate(10);
+  Coord current = origin;
+  Coord previousBearingPoint = origin;
   
-  while (millis() - tBegin <= holdTime)
-  {
-    int numSamples = 0;
-    unsigned long averBegin = millis();
-    float courseDeviation = 0;
-    unsigned long tLastSample = millis() - sampleDt;
-
-    while (millis() - averBegin <= averTime) // Tightest loop in the whole AUV
-    {
-      if (millis() - tLastSample >= sampleDt)
-      {
-        courseDeviation += angleBetweenBearings(orient.heading()*M_PI/180, courseInRad);
-        numSamples++;
-        tLastSample = millis();
-      }
-    }
-
-    courseDeviation /= numSamples;
+  while (current.distanceTo(origin) < holdDistance)
+  {    
+    float courseDeviation = angleBetweenBearings(bearingInRad, courseInRad);
 
     int servoSteps = rudderServo.getNumSteps();
-    int rudderState = clamp(-servoSteps, courseDeviation / sectorWidthInRad * servoSteps, servoSteps);
-
-    rudderServo.turnTo(rudderState);
+    int rudderState = round(clamp(-servoSteps, courseDeviation / sectorWidthInRad * servoSteps, servoSteps));
+    
+//    rudderServo.turnTo(rudderState);
 //    Serial.print("Heading, Course, Course deviation, rudderState: ");
 //    Serial.print(orient.heading()); Serial.print(" ");
-//    Serial.print(course); Serial.print(" ");
+    Serial.print("Course: ");Serial.println(course);
+    Serial.print("Bearing: ");Serial.println(bearing);
 //    Serial.print(courseDeviation*180/M_PI); Serial.print(" ");
-    Serial.print("rudderState: ");
-    Serial.println(rudderState);
+    Serial.print("rudderState: ");Serial.println(rudderState);
+
+    while (current.distanceTo(previousBearingPoint) < bearingComputeDistance)
+    {
+      current = gpsOnly.averageCoordinate(10);
+    }
+    bearingInRad = previousBearingPoint.bearingTo(current);
+    bearing = (int) bearingInRad;
+
+    previousBearingPoint = current;
   }
 #endif
 }
