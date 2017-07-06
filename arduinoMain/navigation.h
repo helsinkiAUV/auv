@@ -65,6 +65,6 @@ const int sectorWidthInRad = 80*M_PI/180; // Figure out a better name.
 void newBearing (const Coord& start, const Coord& target, const Coord& current, const float maxPassDist,
                  const float maxCrossTrackErr, int& nextBearing, float& distToTarget, float& crossTrackErr, bool& inForbiddenZone);
 
-void holdCourse(Gps& gpsOnly, ServoAuv& rudderServo, int course, double holdDistance, 
+void holdCourse(Gps& gpsOnly, Coord& current, const Coord& target, float passDist, ServoAuv& rudderServo, int course, float holdDistance, 
   float bearingComputeDistance, int& bearing);
 #endif // NAVIGATION_H_

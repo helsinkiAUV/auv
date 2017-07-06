@@ -95,16 +95,15 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
   }
 
 }
-
-void holdCourse(Gps& gpsOnly, ServoAuv& rudderServo, int course, double holdDistance, 
+void holdCourse(Gps& gpsOnly, Coord& current, const Coord& target, float passDist, ServoAuv& rudderServo, int course, float holdDistance, 
   float bearingComputeDistance, int& bearing)
 {
 #ifdef ARDUINO
   float courseInRad = course * M_PI / 180;
   float bearingInRad = bearing * M_PI / 180;
   int numBearingComputations = 0;
-  Coord origin = gpsOnly.averageCoordinate(10);
-  Coord current = origin;
+  current = gpsOnly.averageCoordinate(10);
+  Coord origin = current;
   Coord previousBearingPoint = origin;
   
   while (current.distanceTo(origin) < holdDistance)
@@ -121,12 +120,17 @@ void holdCourse(Gps& gpsOnly, ServoAuv& rudderServo, int course, double holdDist
     Serial.print("Bearing: ");Serial.println(bearing);
 //    Serial.print(courseDeviation*180/M_PI); Serial.print(" ");
     Serial.print("rudderState: ");Serial.println(rudderState);
+    Serial.println();
 
     while (current.distanceTo(previousBearingPoint) < bearingComputeDistance)
     {
       current = gpsOnly.averageCoordinate(10);
+      if (current.distanceTo(target) < passDist)
+      {
+        return;
+      }
     }
-    bearingInRad = previousBearingPoint.bearingTo(current);
+    bearingInRad = previousBearingPoint.bearingTo(current)*180/M_PI;
     bearing = (int) bearingInRad;
 
     previousBearingPoint = current;
