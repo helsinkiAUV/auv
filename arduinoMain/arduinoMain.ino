@@ -13,7 +13,7 @@ ServoAuv servo(1);
 Gps gps(8,7);
 Adafruit_GPS Ada = gps.getAdaGPS();
 const int numPoints = 2;
-Coord points[numPoints] = {Coord(60.320159, 25.083391), Coord(60.320754, 25.083293)};
+Coord points[numPoints] = {Coord(60.203040, 24.961644), Coord(60.203197, 24.962177)};
 
 void setup() 
 {
@@ -35,14 +35,14 @@ void setup()
 //    Serial.println(errorFlag);
 //    delay(1000);
 //  }
-  Coord start = gps.averageCoordinate(10);
+  Coord start(60.203264, 24.961356); // = gps.averageCoordinate(10);
   for (int i = 0; i < numPoints; i++)
   {
     Coord target = points[i];
     Coord current = gps.averageCoordinate(10);
 
-    float passDist = 10;
-    float maxXte = 20;
+    float passDist = 5;
+    float maxXte = 1E4;
     int bearing = current.bearingTo(target)*180/M_PI;
     while(current.distanceTo(target) >= passDist)
     {
@@ -50,13 +50,11 @@ void setup()
       float distToTarget, xte;
       bool inForbiddenZone;
       newBearing (start, target, current, passDist, maxXte, newCourse, distToTarget, xte, inForbiddenZone);
-      Serial.println("----");
-      Serial.print("Dist targ.: "); Serial.println(distToTarget);
-      Serial.println("----");
 
-      holdCourse(gps, current, target, passDist, servo, newCourse, 12.0, 5.0, bearing);     
+      holdCourse(gps, start, current, target, passDist, servo, newCourse, 7.0, 5.0, bearing, xte);     
     }
     Serial.println("Arrived at WP");
+    start = target;
   }
   Serial.println("Path Completed!");
   

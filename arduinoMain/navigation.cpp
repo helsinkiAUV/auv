@@ -95,8 +95,8 @@ void newBearing (const Coord& start, const Coord& target, const Coord& current, 
   }
 
 }
-void holdCourse(Gps& gpsOnly, Coord& current, const Coord& target, float passDist, ServoAuv& rudderServo, int course, float holdDistance, 
-  float bearingComputeDistance, int& bearing)
+void holdCourse(Gps& gpsOnly, Coord& start, Coord& current, const Coord& target, float passDist, ServoAuv& rudderServo, int course, float holdDistance, 
+  float bearingComputeDistance, int& bearing, float crossTrackError)
 {
 #ifdef ARDUINO
   float courseInRad = course * M_PI / 180;
@@ -116,15 +116,25 @@ void holdCourse(Gps& gpsOnly, Coord& current, const Coord& target, float passDis
 //    rudderServo.turnTo(rudderState);
 //    Serial.print("Heading, Course, Course deviation, rudderState: ");
 //    Serial.print(orient.heading()); Serial.print(" ");
-    Serial.print("Course: ");Serial.println(course);
-    Serial.print("Bearing: ");Serial.println(bearing);
-//    Serial.print(courseDeviation*180/M_PI); Serial.print(" ");
-    Serial.print("rudderState: ");Serial.println(rudderState);
-    Serial.println();
+    //Serial.print("Course: ");
+
 
     while (current.distanceTo(previousBearingPoint) < bearingComputeDistance)
     {
       current = gpsOnly.averageCoordinate(10);
+
+      Serial.print(course);Serial.print(",");
+    
+    Serial.print(bearing);Serial.print(",");
+    Serial.print(current.latd,7);Serial.print(",");Serial.print(current.lond,7);Serial.print(",");
+    
+    Serial.print(rudderState);Serial.print(",");
+    Coord projectionToGc = current.closestGreatCirclePoint(start, target);
+    crossTrackError = current.distanceTo(projectionToGc);
+    Serial.print(crossTrackError);Serial.print(",");
+    Serial.print(current.distanceTo(target));
+    Serial.println();
+      
       if (current.distanceTo(target) < passDist)
       {
         return;
