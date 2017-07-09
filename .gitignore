@@ -15,5 +15,7 @@
 !*.h
 !*.py
 !*.ino
+!*.cpp
+!.gitignore
 
 *._simOut.csv

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "motor.hpp"
 #include "ARDUINO.H"
 
@@ -64,7 +63,7 @@ int Motor::convertMotorSpeedValue(int input) {
   else if (input == 3)
     return 255; 
 }
-=======
+
 //#include "motor.hpp"
 //#include "Arduino.h"
 //
@@ -130,5 +129,5 @@ int Motor::convertMotorSpeedValue(int input) {
 //  else if (input == 3)
 //    return 255; 
 //}
->>>>>>> 66000a34b0f44491b8a5036e798ca4623874c91e
+
 
