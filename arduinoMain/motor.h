@@ -20,8 +20,8 @@
  * @license GPL-3.0+ <http://spdx.org/licenses/GPL-3.0+>
  */
 
-#ifndef MOTOR_HPP_
-#define MOTOR_HPP_
+#ifndef MOTOR_H_
+#define MOTOR_H_
 
 //#include "auv.h"
 //#include "constants.h"
@@ -47,4 +47,4 @@ class Motor
       int convertMotorSpeedValue(int); //input the 0-3, output the arduino signal value
 };
 
-#endif /* MOTOR_HPP_ */
+#endif /* MOTOR_H_ */

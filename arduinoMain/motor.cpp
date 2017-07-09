@@ -1,4 +1,4 @@
-#include "motor.hpp"
+#include "motor.h"
 #include "ARDUINO.H"
 
 Motor::Motor(int p_digitalPort, int p_analogPort) {
