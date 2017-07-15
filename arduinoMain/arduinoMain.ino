@@ -6,6 +6,7 @@
 #include "navigation.h"
 #include "ServoAuv.h"
 #include "OrientationSensor.h"
+#include "Gprs.h"
 
 int errorFlag = 0;
 OrientationSensor orient;
