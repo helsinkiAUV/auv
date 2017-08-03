@@ -1,44 +1,45 @@
 #include "Gprs.h"
-#include <SoftwareSerial.h>
+#include "Arduino.h"
+//#include <SoftwareSerial.h>
 
-Gprs::Gprs(int pin) 
+Gprs::Gprs(String pin, int TX, int RX) : _gprsSerial(TX, RX)
 {
-      _mySerial;
+      //_gprsSerial;
       _pin = pin;
       _apn = "internet.saunalahti";
  
-      _mySerial.begin(19200);
+      _gprsSerial.begin(19200);
 
 }
 
-String softwareSerialCurrentBufferToString() 
+String Gprs::softwareSerialCurrentBufferToString() 
 {
    	String output = "";
-        while(mySerial.available()!=0)
-	    output = output + _mySerial.read();
+        while(_gprsSerial.available()!=0)
+	    output = output + _gprsSerial.read();
 	
 	return output;
 }
 
-void FlushSerialBuffer()
+void Gprs::FlushSerialBuffer()
 {
-    while(mySerial.available()!=0)
-        mySerial.read();
+    while(_gprsSerial.available()!=0)
+        _gprsSerial.read();
 }
 
-void powerOn() 
-}
+void Gprs::powerOn() 
+{
     pushPowerButton();
     delay(10000);
     setPin(_pin);
 }
 
-void powerOff() 
-}
+void Gprs::powerOff() 
+{
     pushPowerButton();
 }
 
-void pushPowerButton()
+void Gprs::pushPowerButton()
 {
     pinMode(9,OUTPUT);
     digitalWrite(9,LOW);
@@ -48,51 +49,52 @@ void pushPowerButton()
     digitalWrite(9,LOW);
 }
 
-void setPin(String Pin) 
+void Gprs::setPin(String Pin) 
 {
-    String PINCall = "AT+CPIN=" + PIN;
-   _mySerial.println(PINCall);
+    String PINCall = "AT+CPIN=" + Pin;
+   _gprsSerial.println(PINCall);
     delay(20000);
 }
 
-String SubmitHttpRequest(String URL)
+String Gprs::SubmitHttpRequest(String URL)
 {
-    _mySerial.println("AT+CSQ");
+    _gprsSerial.println("AT+CSQ");
     delay(100);
-    _mySerial.println("AT+CGATT?");
+    _gprsSerial.println("AT+CGATT?");
     delay(100);
-    _mySerial.println("AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"");//setting the SAPBR, the connection type is using gprs
+    _gprsSerial.println("AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"");//setting the SAPBR, the connection type is using gprs
     delay(1000);
-    String APNCall = "AT+SAPBR=3,1,\"APN\",\""+"internet.saunalahti"+"\"";
-    _mySerial.println(APNCall);//setting the APN, the second need you fill in your local apn server
+    //String APNCall = "AT+SAPBR=3,1,\"APN\",\""+"internet.saunalahti"+"\"";
+    String APNCall = "lol";
+    _gprsSerial.println(APNCall);//setting the APN, the second need you fill in your local apn server
     delay(4000);
-    _mySerial.println("AT+SAPBR=1,1");//setting the SAPBR, for detail you can refer to the AT command mamual
+    _gprsSerial.println("AT+SAPBR=1,1");//setting the SAPBR, for detail you can refer to the AT command mamual
     delay(2000);
-    _mySerial.println("AT+HTTPINIT"); //init the HTTP request
+    _gprsSerial.println("AT+HTTPINIT"); //init the HTTP request
     delay(2000);
     String URLCall = "AT+HTTPPARA=\"URL\",\"" + URL + "\"";
-    _mySerial.println(URLCall);// setting the httppara, the second parameter is the website you want to access
+    _gprsSerial.println(URLCall);// setting the httppara, the second parameter is the website you want to access
     delay(1000);
 
     String output;
-    _mySerial.println("AT+HTTPACTION=0");//submit the request
+    _gprsSerial.println("AT+HTTPACTION=0");//submit the request
     delay(10000);//the delay is very important, the delay time is base on the return from the website, if the return datas are very large, the time required longer.
     FlushSerialBuffer();
 
-    mySerial.println("AT+HTTPREAD=0,54");// read the data from the website you access
+    _gprsSerial.println("AT+HTTPREAD=0,54");// read the data from the website you access
     delay(300);
     for(int i = 0; i<15; i++) {
-      mySerial.read();
+      _gprsSerial.read();
     }
     output = softwareSerialCurrentBufferToString();    
-    mySerial.println("AT+HTTPREAD=55,54");// read the data from the website you access
+    _gprsSerial.println("AT+HTTPREAD=55,54");// read the data from the website you access
     delay(300);
     for(int i = 0; i<16; i++) {
-      mySerial.read();
+      _gprsSerial.read();
     }
     output = output + softwareSerialCurrentBufferToString();   
     delay(300);
-    _mySerial.println("");
+    _gprsSerial.println("");
     delay(100);
     return output;
 }

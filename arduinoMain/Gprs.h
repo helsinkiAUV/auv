@@ -6,22 +6,22 @@
 class Gprs
 {
     private:
-    SoftwareSerial _mySerial;
-    String _avn;
+    SoftwareSerial _gprsSerial;
+    String _apn;
     String _pin;
 
   public:
-    explicit Gprs (String pin);
+    explicit Gprs (String,int,int);
 
     void powerOn ();
     void powerOff ();
-    void FlushSerialBuffer()
-    String SubmitHttpRequest(String URL);
+    void FlushSerialBuffer();
+    String SubmitHttpRequest(String);
 
     
   private:
     String softwareSerialCurrentBufferToString();
-    void setPin(String Pin);
+    void setPin(String);
     void pushPowerButton();
     //-----
     
