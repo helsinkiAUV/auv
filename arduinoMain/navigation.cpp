@@ -108,12 +108,12 @@ void holdCourse(Gps& gpsOnly, Coord& start, Coord& current, const Coord& target,
   
   while (current.distanceTo(origin) < holdDistance)
   {    
-    float courseDeviation = angleBetweenBearings(bearingInRad, courseInRad);
+    float courseDeviation = -angleBetweenBearings(bearingInRad, courseInRad);
 
     int servoSteps = rudderServo.getNumSteps();
     int rudderState = round(clamp(-servoSteps, courseDeviation / sectorWidthInRad * servoSteps, servoSteps));
     
-//    rudderServo.turnTo(rudderState);
+    rudderServo.turnTo(rudderState);
 //    Serial.print("Heading, Course, Course deviation, rudderState: ");
 //    Serial.print(orient.heading()); Serial.print(" ");
     //Serial.print("Course: ");

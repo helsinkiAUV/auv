@@ -17,11 +17,23 @@ Coord points[numPoints] = {Coord(60.203040, 24.961644), Coord(60.203197, 24.9621
 
 void setup() 
 {
+  servo.begin();
   Serial.begin(19200);
   Serial.println("Begin setup");
+//  while(true)
+//  {
+//    for(int i = -6; i <= 6; i++)
+//    { 
+//      Serial.println(i);
+//      servo.turnTo(0); 
+//      delay(500);
+//    }
+//  }
+//  Coord x = gps.averageCoordinate(10);
+//  Serial.println(x.latd);
   //orient.begin(errorFlag, true);
 
-  servo.begin();
+  
   Ada.begin(9200);
   // USE sendCommand() here. They don't seem to really work in the constructor of gps class
   // Also using it here once and then commenting it out might put the wanted code indefinitely
@@ -35,12 +47,14 @@ void setup()
 //    Serial.println(errorFlag);
 //    delay(1000);
 //  }
+  
   Coord start(60.203264, 24.961356); // = gps.averageCoordinate(10);
   for (int i = 0; i < numPoints; i++)
   {
     Coord target = points[i];
+    //Serial.println("before");
     Coord current = gps.averageCoordinate(10);
-
+    //Serial.println(current.latd);
     float passDist = 5;
     float maxXte = 1E4;
     int bearing = current.bearingTo(target)*180/M_PI;
@@ -53,7 +67,7 @@ void setup()
 
       holdCourse(gps, start, current, target, passDist, servo, newCourse, 7.0, 5.0, bearing, xte);     
     }
-    Serial.println("Arrived at WP");
+    //Serial.println("Arrived at WP");
     start = target;
   }
   Serial.println("Path Completed!");

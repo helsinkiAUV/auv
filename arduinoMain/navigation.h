@@ -41,7 +41,7 @@
 #include "OrientationSensor.h"
 #include <math.h> // fmod, M_PI
 
-const int sectorWidthInRad = 135*M_PI/180; // Figure out a better name.
+const int sectorWidthInRad = 80*M_PI/180; // Figure out a better name.
 
 // MAIN NAVIGATION FUNCTION:
 
