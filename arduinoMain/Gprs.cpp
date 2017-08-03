@@ -2,6 +2,9 @@
 #include "Arduino.h"
 //#include <SoftwareSerial.h>
 
+// using flash memory to strings 3.8.2017
+#include <avr/pgmspace.h>
+
 Gprs::Gprs(String pin, int TX, int RX) : _gprsSerial(TX, RX)
 {
       //_gprsSerial;
@@ -31,7 +34,8 @@ void Gprs::powerOn()
 {
     pushPowerButton();
     delay(10000);
-    setPin(_pin);
+    //setPin(_pin);
+    setPin();
 }
 
 void Gprs::powerOff() 
@@ -49,23 +53,27 @@ void Gprs::pushPowerButton()
     digitalWrite(9,LOW);
 }
 
-void Gprs::setPin(String Pin) 
+//void Gprs::setPin(String Pin)
+void Gprs::setPin() 
 {
-    String PINCall = "AT+CPIN=" + Pin;
+    String PINCall = "AT+CPIN=" + _pin;
    _gprsSerial.println(PINCall);
     delay(20000);
 }
 
 String Gprs::SubmitHttpRequest(String URL)
 {
+    Serial.println(F("SubmitHttp Start"));
     _gprsSerial.println("AT+CSQ");
     delay(100);
+    Serial.println(_gprsSerial.read());
     _gprsSerial.println("AT+CGATT?");
     delay(100);
-    _gprsSerial.println("AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"");//setting the SAPBR, the connection type is using gprs
+    _gprsSerial.println(F("AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\""));//setting the SAPBR, the connection type is using gprs
     delay(1000);
     //String APNCall = "AT+SAPBR=3,1,\"APN\",\""+"internet.saunalahti"+"\"";
-    String APNCall = "lol";
+    String APNCall = "AT+SAPBR=3,1,\"APN\",\""+_apn+"\"";
+    //String APNCall = "lol";
     _gprsSerial.println(APNCall);//setting the APN, the second need you fill in your local apn server
     delay(4000);
     _gprsSerial.println("AT+SAPBR=1,1");//setting the SAPBR, for detail you can refer to the AT command mamual
@@ -81,12 +89,14 @@ String Gprs::SubmitHttpRequest(String URL)
     delay(10000);//the delay is very important, the delay time is base on the return from the website, if the return datas are very large, the time required longer.
     FlushSerialBuffer();
 
-    _gprsSerial.println("AT+HTTPREAD=0,54");// read the data from the website you access
+    _gprsSerial.println(F("AT+HTTPREAD=0,54"));// read the data from the website you access
     delay(300);
     for(int i = 0; i<15; i++) {
       _gprsSerial.read();
     }
-    output = softwareSerialCurrentBufferToString();    
+    output = softwareSerialCurrentBufferToString();
+    Serial.println(F("prel op"));
+    Serial.println(output);    
     _gprsSerial.println("AT+HTTPREAD=55,54");// read the data from the website you access
     delay(300);
     for(int i = 0; i<16; i++) {

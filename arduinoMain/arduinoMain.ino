@@ -6,20 +6,41 @@
 #include "navigation.h"
 #include "ServoAuv.h"
 #include "OrientationSensor.h"
+#include "Gprs.h"
+
+// 3.8.2017
+#include <avr/pgmspace.h>
 
 int errorFlag = 0;
 OrientationSensor orient;
 ServoAuv servo(1);
-Gps gps(8,7);
+// Gps gps(8,7);
+Gps gps(11,10); //9 is used for the GPRS stuff
 Adafruit_GPS Ada = gps.getAdaGPS();
 const int numPoints = 2;
 Coord points[numPoints] = {Coord(60.203040, 24.961644), Coord(60.203197, 24.962177)};
 
+// 3.8.2017 18:42 Adding gprs object
+Gprs chekov = Gprs("0000",8,7);
+
 void setup() 
 {
-  servo.begin();
   Serial.begin(19200);
-  Serial.println("Begin setup");
+  Serial.println("LOL");
+  //servo.begin();
+  Serial.println(F("Begin setup"));
+
+
+  // test code for gprs communication 3.8.2017
+  chekov.powerOn();
+  Serial.println("Gprs powered on!");
+  String URL = F("http://e23a2455.ngrok.io/foo/send?lol=ArduinoSanooHei!");
+  Serial.println(chekov.SubmitHttpRequest(URL));
+  Serial.println(F("HTTP lähetetty"));
+  Serial.println("jeejee");
+
+
+  // end of test code for gprs communication 3.8.2017
 //  while(true)
 //  {
 //    for(int i = -6; i <= 6; i++)
@@ -70,7 +91,7 @@ void setup()
     //Serial.println("Arrived at WP");
     start = target;
   }
-  Serial.println("Path Completed!");
+  Serial.println(F("Path Completed!"));
   
 }
 

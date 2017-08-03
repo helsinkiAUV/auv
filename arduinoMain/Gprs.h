@@ -21,7 +21,8 @@ class Gprs
     
   private:
     String softwareSerialCurrentBufferToString();
-    void setPin(String);
+    //void setPin(String);
+    void setPin();
     void pushPowerButton();
     //-----
     
